@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <metrika>
+            <general>
+                <enabled>0</enabled>
+                <container_name>dataLayer</container_name>
+                <debug>0</debug>
+                <webvisor>1</webvisor>
+                <clickmap>1</clickmap>
+                <tracklinks>1</tracklinks>
+                <trackhash>0</trackhash>
+                <accuratetrackbounce>0</accuratetrackbounce>
+                <noindex>0</noindex>
+                <ecommerce>1</ecommerce>
+                <skuAttr>sku</skuAttr>
+            </general>
+        </metrika>
+    </default>
+</config>
