@@ -10,7 +10,7 @@
 {
     ...
     "require": {
-        "mygento/metrika": "2.*"
+        "mygento/module-metrika": "2.*"
     }
     ...
 }
