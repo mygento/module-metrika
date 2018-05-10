@@ -8,10 +8,11 @@ before_script:
 - phpenv config-rm xdebug.ini
 - composer install --no-interaction --prefer-dist
 - php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1
+- php vendor/bin/phpcs --config-set show_warnings 0
+
 script:
-- php vendor/bin/parallel-lint --exclude vendor .
-- php vendor/bin/phpcs --standard=vendor/mygento/coding-standard/Mygento-Mage2 .
-- php vendor/bin/phpmd . text cleancode,codesize,controversial,design,naming,unusedcode vendor/mygento/coding-standard/Mygento-Mage2/phpmd.xml --exclude vendor
+- php vendor/bin/grumphp run
+
 env:
   global:
   - secure: GBljIgKWStACph86wssa701MMQq7xzxq8z7LIfmtcXbBv9v7N6O84QIskkSsw3g1Y90orvw2+LWnL4OAfJqoKdGrAQYOi7w/sPyVCa2examddD7MFkB3afJHfWjRIRmCAG5a+VnDfGyoFsul7SAlrFmAmf/7g6QgznUQDeUo3iE=

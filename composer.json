@@ -3,13 +3,13 @@
   "type": "magento2-module",
   "version": "2.2.2",
   "license": "OSL-3.0",
-  "homepage": "https://github.com/mygento/metrika",
+  "homepage": "https://github.com/mygento/module-metrika",
   "description": "Yandex Metrika Integration to Magento",
   "authors": [
     {
       "name": "Nikita Tarasov",
       "email": "nikita@mygento.net",
-      "homepage": "http://www.mygento.net/",
+      "homepage": "https://www.mygento.net/",
       "role": "Developer"
     },
     {

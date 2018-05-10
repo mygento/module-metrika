@@ -18,12 +18,12 @@ class AddToCart implements \Magento\Framework\Event\ObserverInterface
      *
      * @var \Magento\Framework\Session\SessionManagerInterface
      */
-    protected $session;
+    private $session;
 
     /**
      * @var \Mygento\Base\Helper\Data
      */
-    protected $helper;
+    private $helper;
 
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
@@ -53,7 +53,7 @@ class AddToCart implements \Magento\Framework\Event\ObserverInterface
                             $product->getId()
                         ),
                         'name' => $product->getName(),
-                        'price' => $product->getPrice(),
+                        'price' => round($product->getFinalPrice(), 2),
                         'quantity' => $qty,
                     ]
                 ]
@@ -68,7 +68,7 @@ class AddToCart implements \Magento\Framework\Event\ObserverInterface
      * @param $data
      * @return mixed
      */
-    protected function setSessionData($data)
+    private function setSessionData($data)
     {
         $sessionData = $this->session->getMetrika();
         if ($sessionData && is_array($sessionData)) {

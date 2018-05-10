@@ -15,7 +15,7 @@ class Success extends \Mygento\Metrika\Block\Tracker
     /**
      * @var \Magento\Checkout\Model\Session
      */
-    protected $checkoutSession;
+    private $checkoutSession;
 
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -43,13 +43,15 @@ class Success extends \Mygento\Metrika\Block\Tracker
         }
         $prodData = [];
         foreach ($order->getAllVisibleItems() as $item) {
+            $qty = (int) $item->getQtyOrdered();
+            $price = ($item->getRowTotal() - $item->getDiscountAmount()) / $qty;
             $prodData[] = [
                 'id' => (string)$this->helper->getAttrValueByParam(
                     'metrika/general/skuAttr',
                     $item->getProductId()
                 ),
                 'name' => $item->getName(),
-                'price' => $item->getPrice(),
+                'price' => round($price, 2),
                 'quantity' => (int)$item->getQtyOrdered()
             ];
         }
