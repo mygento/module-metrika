@@ -20,7 +20,7 @@
 }
 ```
 
-## Yandex Metrica Magento 2 intergration extension
+## Yandex Metrica Magento 2 integration extension
 <p>Simple and quick counter integration for Magento e-commerce store.</p>
 <ul>
 <li>Counter integration to top of all pages (after_body_start section)</li>
