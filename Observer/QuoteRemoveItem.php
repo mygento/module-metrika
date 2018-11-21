@@ -1,7 +1,8 @@
 <?php
+
 /**
  * @author Mygento Team
- * @copyright 2017 Mygento (https://www.mygento.ru)
+ * @copyright 2015-2018 Mygento (https://www.mygento.ru)
  * @package Mygento_Metrika
  */
 

@@ -2,5 +2,5 @@
 <ruleset name="Mygento-Mage2MOD">
     <rule ref="./vendor/mygento/coding-standard/Mygento-Mage2"/>
     <rule ref="./vendor/magento-ecg/coding-standard/EcgM2"/>
-    <!-- <rule ref="./vendor/magento/marketplace-eqp"/> -->
+    <!--     <rule ref="./vendor/magento/marketplace-eqp"/> -->
 </ruleset>
