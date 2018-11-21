@@ -4,10 +4,10 @@ $options = $block->getOptions();
 
 $counterClass = 'Ya.Metrika';
 $counterCallbacks = 'yandex_metrika_callbacks';
-$bettaPlayer = $this->getConfig('beta_player');
-if ($bettaPlayer) {
-    $counterClass = 'Ya.Metrika2';
-    $counterCallbacks = 'yandex_metrika_callbacks2';
+$betaPlayer = $this->getConfig('beta_player');
+if ($betaPlayer) {
+    $counterClass .= '2';
+    $counterCallbacks .= '2';
 }
 ?>
 <!-- Yandex.Metrika counter -->
