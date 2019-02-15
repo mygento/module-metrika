@@ -1,6 +1,6 @@
 ## Интеграция Яндекс.Метрики в Magento 2
 
-[![Build Status](https://travis-ci.org/mygento/module-metrika.svg?branch=v2.2)](https://travis-ci.org/mygento/module-metrika)
+[![Build Status](https://travis-ci.org/mygento/module-metrika.svg?branch=v2.3)](https://travis-ci.org/mygento/module-metrika)
 [![Latest Stable Version](https://poser.pugx.org/mygento/module-metrika/v/stable)](https://packagist.org/packages/mygento/module-metrika)
 [![Total Downloads](https://poser.pugx.org/mygento/module-metrika/downloads)](https://packagist.org/packages/mygento/module-metrika)
 
