@@ -2,7 +2,7 @@
 
 /**
  * @author Mygento Team
- * @copyright 2015-2018 Mygento (https://www.mygento.ru)
+ * @copyright 2015-2019 Mygento (https://www.mygento.ru)
  * @package Mygento_Metrika
  */
 
@@ -20,22 +20,26 @@ class AddToCart implements \Magento\Framework\Event\ObserverInterface
      * @var \Magento\Framework\Session\SessionManagerInterface
      */
     private $session;
-
     /**
-     * @var \Mygento\Base\Helper\Data
+     * @var \Mygento\Base\Api\ProductAttributeHelperInterface
      */
     private $helper;
 
+    /**
+     * AddToCart constructor.
+     * @param \Magento\Framework\Session\SessionManagerInterface $session
+     * @param \Mygento\Base\Api\ProductAttributeHelperInterface $helper
+     */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
-        \Mygento\Base\Helper\Data $helper
+        \Mygento\Base\Api\ProductAttributeHelperInterface $helper
     ) {
         $this->session = $session;
         $this->helper = $helper;
     }
 
     /**
-     * @param Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
@@ -49,7 +53,7 @@ class AddToCart implements \Magento\Framework\Event\ObserverInterface
             'ecommerce' => [
                 'add' => [
                     'products' => [
-                        'id' => (string)$this->helper->getAttrValueByParam(
+                        'id' => (string)$this->helper->getValueByConfigPathOrDefault(
                             'metrika/general/skuAttr',
                             $product->getId()
                         ),
@@ -66,7 +70,7 @@ class AddToCart implements \Magento\Framework\Event\ObserverInterface
     /**
      * Set or Update Session Data
      *
-     * @param $data
+     * @param mixed $data
      * @return mixed
      */
     private function setSessionData($data)

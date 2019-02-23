@@ -26,7 +26,6 @@
     "yandex"
   ],
   "require": {
-    "magento/module-checkout": "100.*",
     "mygento/module-base": "2.3.*"
   },
   "require-dev": {

@@ -2,7 +2,7 @@
 
 /**
  * @author Mygento Team
- * @copyright 2015-2018 Mygento (https://www.mygento.ru)
+ * @copyright 2015-2019 Mygento (https://www.mygento.ru)
  * @package Mygento_Metrika
  */
 
@@ -16,9 +16,10 @@ class Product extends \Mygento\Metrika\Block\Tracker
 
     /**
      * Render Metrika tracking product scripts
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return string
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     * @return string
      */
     protected function _toHtml()
     {
@@ -27,7 +28,7 @@ class Product extends \Mygento\Metrika\Block\Tracker
             return '';
         }
         $prodData = [
-            'id' => (string)$this->helper->getAttrValueByParam(
+            'id' => (string)$this->attributeHelper->getValueByConfigPathOrDefault(
                 'metrika/general/skuAttr',
                 $currentProduct->getId()
             ),

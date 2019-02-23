@@ -2,7 +2,7 @@
 
 /**
  * @author Mygento Team
- * @copyright 2015-2018 Mygento (https://www.mygento.ru)
+ * @copyright 2015-2019 Mygento (https://www.mygento.ru)
  * @package Mygento_Metrika
  */
 
@@ -38,18 +38,25 @@ class Tracker extends \Magento\Framework\View\Element\Template
      * @var \Mygento\Base\Helper\Data
      */
     protected $helper;
+    /**
+     * @var \Mygento\Base\Api\ProductAttributeHelperInterface
+     */
+    protected $attributeHelper;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
+     * Tracker constructor.
+     * @param \Mygento\Base\Helper\Data $helper
+     * @param \Mygento\Base\Api\ProductAttributeHelperInterface $attributeHelper
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param \Mygento\Base\Helper\Data $helper
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
      */
     public function __construct(
+        \Mygento\Base\Helper\Data $helper,
+        \Mygento\Base\Api\ProductAttributeHelperInterface $attributeHelper,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Mygento\Base\Helper\Data $helper,
         \Magento\Framework\View\Element\Template\Context $context,
         array $data = []
     ) {
@@ -58,6 +65,7 @@ class Tracker extends \Magento\Framework\View\Element\Template
         $this->coreRegistry = $coreRegistry;
         $this->session = $context->getSession();
         $this->helper = $helper;
+        $this->attributeHelper = $attributeHelper;
     }
 
     /**
@@ -155,7 +163,7 @@ class Tracker extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @param $data
+     * @param mixed $data
      * @return string
      */
     public function jsonEncode($data)

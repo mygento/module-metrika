@@ -2,7 +2,7 @@
 
 /**
  * @author Mygento Team
- * @copyright 2015-2018 Mygento (https://www.mygento.ru)
+ * @copyright 2015-2019 Mygento (https://www.mygento.ru)
  * @package Mygento_Metrika
  */
 
@@ -18,15 +18,26 @@ class Success extends \Mygento\Metrika\Block\Tracker
      */
     private $checkoutSession;
 
+    /**
+     * Success constructor.
+     * @param \Mygento\Base\Helper\Data $helper
+     * @param \Mygento\Base\Api\ProductAttributeHelperInterface $attributeHelper
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param array $data
+     */
     public function __construct(
+        \Mygento\Base\Helper\Data $helper,
+        \Mygento\Base\Api\ProductAttributeHelperInterface $attributeHelper,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Mygento\Base\Helper\Data $helper,
         \Magento\Framework\View\Element\Template\Context $context,
         array $data = []
     ) {
-        parent::__construct($coreRegistry, $jsonHelper, $helper, $context, $data);
+        parent::__construct($helper, $attributeHelper, $coreRegistry, $jsonHelper, $context, $data);
         $this->checkoutSession = $checkoutSession;
     }
 
@@ -47,7 +58,7 @@ class Success extends \Mygento\Metrika\Block\Tracker
             $qty = (int) $item->getQtyOrdered();
             $price = ($item->getRowTotal() - $item->getDiscountAmount()) / $qty;
             $prodData[] = [
-                'id' => (string)$this->helper->getAttrValueByParam(
+                'id' => (string)$this->attributeHelper->getValueByConfigPathOrDefault(
                     'metrika/general/skuAttr',
                     $item->getProductId()
                 ),
