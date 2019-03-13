@@ -20,6 +20,7 @@ class AddToCart implements \Magento\Framework\Event\ObserverInterface
      * @var \Magento\Framework\Session\SessionManagerInterface
      */
     private $session;
+
     /**
      * @var \Mygento\Base\Api\ProductAttributeHelperInterface
      */
@@ -53,16 +54,16 @@ class AddToCart implements \Magento\Framework\Event\ObserverInterface
             'ecommerce' => [
                 'add' => [
                     'products' => [
-                        'id' => (string)$this->helper->getValueByConfigPathOrDefault(
+                        'id' => (string) $this->helper->getValueByConfigPathOrDefault(
                             'metrika/general/skuAttr',
                             $product->getId()
                         ),
                         'name' => $product->getName(),
                         'price' => round($product->getFinalPrice(), 2),
                         'quantity' => $qty,
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
         $this->setSessionData($data);
     }
@@ -78,8 +79,10 @@ class AddToCart implements \Magento\Framework\Event\ObserverInterface
         $sessionData = $this->session->getMetrika();
         if ($sessionData && is_array($sessionData)) {
             $sessionData[] = $data;
+
             return $this->session->setMetrika($sessionData);
         }
+
         return $this->session->setMetrika([$data]);
     }
 }

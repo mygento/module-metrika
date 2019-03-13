@@ -38,6 +38,7 @@ class Tracker extends \Magento\Framework\View\Element\Template
      * @var \Mygento\Base\Helper\Data
      */
     protected $helper;
+
     /**
      * @var \Mygento\Base\Api\ProductAttributeHelperInterface
      */
@@ -77,8 +78,10 @@ class Tracker extends \Magento\Framework\View\Element\Template
         $data = $this->session->getMetrika();
         if ($data && is_array($data)) {
             $this->session->unsMetrika();
+
             return $data;
         }
+
         return [];
     }
 
@@ -92,20 +95,20 @@ class Tracker extends \Magento\Framework\View\Element\Template
         $options = [];
         $options['id'] = $this->getCode();
         if ($this->getConfig('webvisor')) {
-            $options['webvisor'] = (bool)$this->getConfig('webvisor');
+            $options['webvisor'] = (bool) $this->getConfig('webvisor');
         }
         if ($this->getConfig('clickmap')) {
-            $options['clickmap'] = (bool)$this->getConfig('clickmap');
+            $options['clickmap'] = (bool) $this->getConfig('clickmap');
         }
         if ($this->getConfig('tracklinks')) {
-            $options['trackLinks'] = (bool)$this->getConfig('tracklinks');
+            $options['trackLinks'] = (bool) $this->getConfig('tracklinks');
         }
         if ($this->getConfig('trackhash')) {
-            $options['trackhash'] = (bool)$this->getConfig('trackhash');
+            $options['trackhash'] = (bool) $this->getConfig('trackhash');
         }
         if ($this->getConfig('accuratetrackbounce')) {
             $options['accurateTrackBounce'] =
-                (bool)$this->getConfig('accuratetrackbounce');
+                (bool) $this->getConfig('accuratetrackbounce');
         }
         if ($this->getConfig('noindex')) {
             $options['ut'] = 'noindex';
@@ -113,6 +116,7 @@ class Tracker extends \Magento\Framework\View\Element\Template
         if ($this->getConfig('ecommerce')) {
             $options['ecommerce'] = $this->getConfig('container_name');
         }
+
         return $options;
     }
 
@@ -124,20 +128,6 @@ class Tracker extends \Magento\Framework\View\Element\Template
     public function getCode()
     {
         return $this->getConfig('counter');
-    }
-
-    /**
-     * Render Metrika tracking scripts
-     *
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     * @return string
-     */
-    protected function _toHtml()
-    {
-        if (!$this->getConfig('enabled')) {
-            return '';
-        }
-        return parent::_toHtml();
     }
 
     /**
@@ -169,5 +159,20 @@ class Tracker extends \Magento\Framework\View\Element\Template
     public function jsonEncode($data)
     {
         return $this->jsonHelper->jsonEncode($data);
+    }
+
+    /**
+     * Render Metrika tracking scripts
+     *
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        if (!$this->getConfig('enabled')) {
+            return '';
+        }
+
+        return parent::_toHtml();
     }
 }

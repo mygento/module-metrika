@@ -58,26 +58,27 @@ class Success extends \Mygento\Metrika\Block\Tracker
             $qty = (int) $item->getQtyOrdered();
             $price = ($item->getRowTotal() - $item->getDiscountAmount()) / $qty;
             $prodData[] = [
-                'id' => (string)$this->attributeHelper->getValueByConfigPathOrDefault(
+                'id' => (string) $this->attributeHelper->getValueByConfigPathOrDefault(
                     'metrika/general/skuAttr',
                     $item->getProductId()
                 ),
                 'name' => $item->getName(),
                 'price' => round($price, 2),
-                'quantity' => (int)$item->getQtyOrdered()
+                'quantity' => (int) $item->getQtyOrdered(),
             ];
         }
         $data = [
             'ecommerce' => [
                 'purchase' => [
                     'actionField' => [
-                        'id' => (string)$order->getIncrementId(),
+                        'id' => (string) $order->getIncrementId(),
                         'shipping' => $order->getShippingAmount(),
                     ],
-                    'products' => [$prodData]
-                ]
-            ]
+                    'products' => [$prodData],
+                ],
+            ],
         ];
+
         return '<script>' . $this->getConfig('container_name') . '.push(' .
             $this->jsonEncode($data) .
             ');</script>' . "\n";

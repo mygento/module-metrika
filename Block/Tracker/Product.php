@@ -13,7 +13,6 @@ namespace Mygento\Metrika\Block\Tracker;
  */
 class Product extends \Mygento\Metrika\Block\Tracker
 {
-
     /**
      * Render Metrika tracking product scripts
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -28,7 +27,7 @@ class Product extends \Mygento\Metrika\Block\Tracker
             return '';
         }
         $prodData = [
-            'id' => (string)$this->attributeHelper->getValueByConfigPathOrDefault(
+            'id' => (string) $this->attributeHelper->getValueByConfigPathOrDefault(
                 'metrika/general/skuAttr',
                 $currentProduct->getId()
             ),
@@ -42,10 +41,11 @@ class Product extends \Mygento\Metrika\Block\Tracker
         $data = [
             'ecommerce' => [
                 'detail' => [
-                    'products' => [$prodData]
-                ]
-            ]
+                    'products' => [$prodData],
+                ],
+            ],
         ];
+
         return '<script>' . $this->getConfig('container_name') . '.push(' .
             $this->jsonEncode($data) .
             ');</script>' . "\n";

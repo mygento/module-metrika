@@ -51,14 +51,14 @@ class QuoteRemoveItem implements \Magento\Framework\Event\ObserverInterface
             'ecommerce' => [
                 'remove' => [
                     'products' => [
-                        'id' => (string)$this->helper->getValueByConfigPathOrDefault(
+                        'id' => (string) $this->helper->getValueByConfigPathOrDefault(
                             'metrika/general/skuAttr',
                             $product->getId()
                         ),
                         'name' => $product->getName(),
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
         $this->setSessionData($data);
     }
@@ -74,8 +74,10 @@ class QuoteRemoveItem implements \Magento\Framework\Event\ObserverInterface
         $sessionData = $this->session->getMetrika();
         if ($sessionData && is_array($sessionData)) {
             $sessionData[] = $data;
+
             return $this->session->setMetrika($sessionData);
         }
+
         return $this->session->setMetrika([$data]);
     }
 }
