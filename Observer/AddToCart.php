@@ -45,6 +45,10 @@ class AddToCart implements \Magento\Framework\Event\ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+        if (!$this->helper->getConfig('metrika/general/enabled')) {
+            return;
+        }
+
         $product = $observer->getEvent()->getProduct();
         $request = $observer->getEvent()->getRequest();
         $params = $request->getParams();
