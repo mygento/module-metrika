@@ -26,10 +26,10 @@
     "yandex"
   ],
   "require": {
-    "mygento/module-base": "^2.3.0"
+    "mygento/module-base": "~2.3.8"
   },
   "require-dev": {
-    "mygento/coding-standard": "^2.13.3"
+    "mygento/coding-standard": "~2.13.5"
   },
   "autoload": {
     "files": [
