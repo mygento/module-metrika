@@ -15,6 +15,11 @@ namespace Mygento\Metrika\Observer;
 class QuoteRemoveItem implements \Magento\Framework\Event\ObserverInterface
 {
     /**
+     * @var \Mygento\Base\Helper\Data
+     */
+    private $helper;
+
+    /**
      * Session
      *
      * @var \Magento\Framework\Session\SessionManagerInterface
@@ -24,18 +29,20 @@ class QuoteRemoveItem implements \Magento\Framework\Event\ObserverInterface
     /**
      * @var \Mygento\Base\Api\ProductAttributeHelperInterface
      */
-    private $helper;
+    private $productHelper;
 
     /**
-     * QuoteRemoveItem constructor.
      * @param \Magento\Framework\Session\SessionManagerInterface $session
-     * @param \Mygento\Base\Api\ProductAttributeHelperInterface $helper
+     * @param \Mygento\Base\Api\ProductAttributeHelperInterface $productHelper
+     * @param \Mygento\Base\Helper\Data $helper
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
-        \Mygento\Base\Api\ProductAttributeHelperInterface $helper
+        \Mygento\Base\Api\ProductAttributeHelperInterface $productHelper,
+        \Mygento\Base\Helper\Data $helper
     ) {
         $this->session = $session;
+        $this->productHelper = $productHelper;
         $this->helper = $helper;
     }
 
@@ -55,7 +62,7 @@ class QuoteRemoveItem implements \Magento\Framework\Event\ObserverInterface
             'ecommerce' => [
                 'remove' => [
                     'products' => [
-                        'id' => (string) $this->helper->getValueByConfigPathOrDefault(
+                        'id' => (string) $this->productHelper->getValueByConfigPathOrDefault(
                             'metrika/general/skuAttr',
                             $product->getId()
                         ),

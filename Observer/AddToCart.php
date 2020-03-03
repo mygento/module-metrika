@@ -24,19 +24,26 @@ class AddToCart implements \Magento\Framework\Event\ObserverInterface
     /**
      * @var \Mygento\Base\Api\ProductAttributeHelperInterface
      */
+    private $productHelper;
+
+    /**
+     * @var \Mygento\Base\Helper\Data
+     */
     private $helper;
 
     /**
-     * AddToCart constructor.
      * @param \Magento\Framework\Session\SessionManagerInterface $session
-     * @param \Mygento\Base\Api\ProductAttributeHelperInterface $helper
+     * @param \Mygento\Base\Api\ProductAttributeHelperInterface $productHelper
+     * @param \Mygento\Base\Helper\Data $helper
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
-        \Mygento\Base\Api\ProductAttributeHelperInterface $helper
+        \Mygento\Base\Api\ProductAttributeHelperInterface $productHelper,
+        \Mygento\Base\Helper\Data $helper
     ) {
         $this->session = $session;
         $this->helper = $helper;
+        $this->productHelper = $productHelper;
     }
 
     /**
@@ -58,7 +65,7 @@ class AddToCart implements \Magento\Framework\Event\ObserverInterface
             'ecommerce' => [
                 'add' => [
                     'products' => [
-                        'id' => (string) $this->helper->getValueByConfigPathOrDefault(
+                        'id' => (string) $this->productHelper->getValueByConfigPathOrDefault(
                             'metrika/general/skuAttr',
                             $product->getId()
                         ),
