@@ -1,19 +1,21 @@
-parameters:
-    git_dir: .
-    bin_dir: vendor/bin
-    tasks:
-        composer:
-            no_check_lock: true
-        git_blacklist:
-            keywords:
-                - "die("
-                - "var_dump("
-                - "exit;"
-        phplint:
-        phpcsfixer2:
-            config: '.php_cs'
-        phpmd:
-            ruleset: ['vendor/mygento/coding-standard/Mygento-Mage2/phpmd.xml']
-        phpcs:
-            warning_severity: null
-        xmllint:
+grumphp:
+  tasks:
+    composer:
+      no_check_lock: true
+    git_blacklist:
+      keywords:
+        - "die("
+        - "var_dump("
+        - "exit;"
+    phplint:
+    phpcsfixer:
+      config: '.php-cs-fixer.php'
+    phpmd:
+      ruleset: ['vendor/mygento/coding-standard/Mygento-Mage2/phpmd.xml']
+    phpcs:
+      warning_severity: 0
+    xmllint:
+    phpstan:
+      autoload_file: 'vendor/mygento/coding-standard/stan/autoload.php'
+      ignore_patterns: ['Test']
+      level: 1

@@ -2,7 +2,7 @@
 
 /**
  * @author Mygento Team
- * @copyright 2015-2020 Mygento (https://www.mygento.ru)
+ * @copyright 2015-2021 Mygento (https://www.mygento.ru)
  * @package Mygento_Metrika
  */
 
