@@ -17,5 +17,14 @@
                 <skuAttr>sku</skuAttr>
             </general>
         </metrika>
+        <csp>
+            <policies>
+                <storefront>
+                    <frame-ancestors>
+                        <inline>0</inline>
+                    </frame-ancestors>
+                </storefront>
+            </policies>
+        </csp>		
     </default>
 </config>
