@@ -2,7 +2,7 @@
 
 /**
  * @author Mygento Team
- * @copyright 2015-2022 Mygento (https://www.mygento.ru)
+ * @copyright 2015-2025 Mygento (https://www.mygento.ru)
  * @package Mygento_Metrika
  */
 
@@ -35,7 +35,7 @@ class Success extends \Mygento\Metrika\Block\Tracker
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Framework\View\Element\Template\Context $context,
-        array $data = []
+        array $data = [],
     ) {
         parent::__construct($helper, $attributeHelper, $coreRegistry, $jsonHelper, $context, $data);
         $this->checkoutSession = $checkoutSession;
@@ -60,7 +60,7 @@ class Success extends \Mygento\Metrika\Block\Tracker
             $prodData[] = [
                 'id' => (string) $this->attributeHelper->getValueByConfigPathOrDefault(
                     'metrika/general/skuAttr',
-                    $item->getProductId()
+                    $item->getProductId(),
                 ),
                 'name' => $item->getName(),
                 'price' => round($price, 2),

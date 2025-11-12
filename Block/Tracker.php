@@ -2,11 +2,15 @@
 
 /**
  * @author Mygento Team
- * @copyright 2015-2022 Mygento (https://www.mygento.ru)
+ * @copyright 2015-2025 Mygento (https://www.mygento.ru)
  * @package Mygento_Metrika
  */
 
 namespace Mygento\Metrika\Block;
+
+use Magento\Framework\Registry;
+use Magento\Store\Model\StoreManagerInterface;
+use Mygento\Base\Helper\Data;
 
 /**
  * Metrika Page Block
@@ -14,59 +18,23 @@ namespace Mygento\Metrika\Block;
 class Tracker extends \Magento\Framework\View\Element\Template
 {
     /**
-     *  Json
-     *
-     * @var \Magento\Framework\Json\Helper\Data
-     */
-    protected $jsonHelper;
-
-    /**
-     *  Registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $coreRegistry;
-
-    /**
      * Session
      *
      * @var \Magento\Framework\Session\SessionManagerInterface
      */
     protected $session;
 
-    /**
-     * @var \Mygento\Base\Helper\Data
-     */
-    protected $helper;
-
-    /**
-     * @var \Mygento\Base\Api\ProductAttributeHelperInterface
-     */
-    protected $attributeHelper;
-
-    /**
-     * Tracker constructor.
-     * @param \Mygento\Base\Helper\Data $helper
-     * @param \Mygento\Base\Api\ProductAttributeHelperInterface $attributeHelper
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param array $data
-     */
     public function __construct(
-        \Mygento\Base\Helper\Data $helper,
-        \Mygento\Base\Api\ProductAttributeHelperInterface $attributeHelper,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Magento\Framework\View\Element\Template\Context $context,
-        array $data = []
+        private StoreManagerInterface $storeManager,
+        protected \Mygento\Base\Helper\Data $helper,
+        protected \Mygento\Base\Api\ProductAttributeHelperInterface $attributeHelper,
+        protected \Magento\Framework\Registry $coreRegistry,
+        protected \Magento\Framework\Json\Helper\Data $jsonHelper,
+        protected \Magento\Framework\View\Element\Template\Context $context,
+        array $data = [],
     ) {
         parent::__construct($context, $data);
-        $this->jsonHelper = $jsonHelper;
-        $this->coreRegistry = $coreRegistry;
         $this->session = $context->getSession();
-        $this->helper = $helper;
-        $this->attributeHelper = $attributeHelper;
     }
 
     /**
@@ -159,6 +127,11 @@ class Tracker extends \Magento\Framework\View\Element\Template
     public function jsonEncode($data)
     {
         return $this->jsonHelper->jsonEncode($data);
+    }
+
+    public function getCurrentCurrencyCode(): string
+    {
+        return $this->storeManager->getStore()->getCurrentCurrencyCode();
     }
 
     /**
