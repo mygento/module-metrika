@@ -26,51 +26,70 @@ define([
          */
         _create: function() {
             this._bindEvents();
-            this._sendImpressions();
+            this._initIntersectionObserver();
         },
 
         /**
-         * Send product impressions (view events)
-         * @private
+         * Initialize Intersection Observer for product visibility tracking
          */
-        _sendImpressions: function() {
+        _initIntersectionObserver: function() {
             var self = this;
-            var products = [];
-            var position = 1;
+            var trackedProducts = new Set();
+            var pendingProducts = [];
+            var sendTimeout = null;
 
-            // Collect all visible products, avoid duplicates
-            var $products = this.element.find('.product-item, .product-item-info');
-            var seenIds = new Set();
+            var observerOptions = {
+                threshold: 0.5 // 50% of product must be visible
+            };
 
-            $products.each(function() {
-                var $product = $(this);
-                var productId = $product.find('[data-product-sku]').data('product-sku') || $product.find('[data-product-id]').data('product-id');
-                
-                // Skip if already processed this product
-                if (seenIds.has(productId)) {
-                    return;
-                }
-                
-                seenIds.add(productId);
-                
-                var productData = self._getImpressionData($product, position);
-                
-                if (productData.id) {
-                    products.push(productData);
-                    position++;
-                }
-            });
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        var $product = $(entry.target);
+                        var productId = $product.find('[data-product-sku]').data('product-sku') || 
+                                       $product.find('[data-product-id]').data('product-id');
 
-            if (products.length > 0) {
-                var impressionsData = {
-                    'ecommerce': {
-                        'currencyCode': this.options.currencyCode,
-                        'impressions': products
+                        if (!trackedProducts.has(productId)) {
+                            trackedProducts.add(productId);
+                            var position = $product.parent().children('.product-item, .product-item-info').index($product) + 1;
+                            var productData = self._getImpressionData($product, position);
+
+                            pendingProducts.push(productData);
+                        }
                     }
-                };
+                });
 
-                window[this.options.containerName].push(impressionsData);
+                // Wait 100ms to collect more products
+                clearTimeout(sendTimeout);
+                sendTimeout = setTimeout(function() {
+                    if (pendingProducts.length) {
+                        self._sendBatchImpressions(pendingProducts.splice(0));
+                    }
+                }, 100);
+            }, observerOptions);
+
+            // Observe all products
+            this.element.find('.product-item, .product-item-info').each(function() {
+                observer.observe(this);
+            });
+        },
+
+        /**
+         * Send batch of product impressions
+         */
+        _sendBatchImpressions: function(products) {
+            if (products.length === 0) {
+                return;
             }
+
+            var impressionsData = {
+                'ecommerce': {
+                    'currencyCode': this.options.currencyCode,
+                    'impressions': products
+                }
+            };
+
+            window[this.options.containerName].push(impressionsData);
         },
 
         /**
