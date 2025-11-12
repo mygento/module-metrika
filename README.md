@@ -1,31 +1,21 @@
-## Интеграция Яндекс.Метрики в Magento 2
+## Yandex.Metrica for Magento 2
 
-[![Build Status](https://travis-ci.com/mygento/module-metrika.svg?branch=v2.3)](https://travis-ci.com/mygento/module-metrika)
+[![Build Status](https://github.com/mygento/module-metrika/actions/workflows/grumphp.yml/badge.svg)](https://github.com/mygento/module-metrika/actions/workflows/grumphp.yml)
 [![Latest Stable Version](https://poser.pugx.org/mygento/module-metrika/v/stable)](https://packagist.org/packages/mygento/module-metrika)
+[![License](https://poser.pugx.org/mygento/module-metrika/license)](https://packagist.org/packages/mygento/module-metrika)
 [![Total Downloads](https://poser.pugx.org/mygento/module-metrika/downloads)](https://packagist.org/packages/mygento/module-metrika)
 
-<p>Модуль позволяет быстро и просто интегрировать счетчик метрики для интернет-магазина на Magento:</p>
-<ul>
-<li>Интеграция кода счетчика в начало страницы (after_body_start)</li>
-</ul>
+Yandex.Metrica web analytics tag with [E-commerce data](https://yandex.com/support/metrica/en/ecommerce/data) fo Magento 2
 
-### Установка/Installation
-```
-{
-    ...
-    "require": {
-        "mygento/module-metrika": "2.*"
-    }
-    ...
-}
+### Installation
+```bash
+composer require mygento/module-metrika^2.0
 ```
 
-## Yandex Metrica Magento 2 integration extension
-<p>Simple and quick counter integration for Magento e-commerce store.</p>
-<ul>
-<li>Counter integration to top of all pages (after_body_start section)</li>
-<li>«Online store parameters» report http://help.yandex.com/metrica/content/e-commerce.xml</li>
-</ul>
-
-=======
-www.mygento.ru
+#### Tracked actions
+- view_item_list
+- view_item
+- add_to_cart
+- remove_from_cart
+- begin_checkout
+- purchase
