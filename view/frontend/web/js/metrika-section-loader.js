@@ -1,0 +1,56 @@
+/**
+ * @author Mygento Team
+ * @copyright 2015-2025 Mygento (https://www.mygento.ru)
+ * @package Mygento_Metrika
+ */
+
+define([
+    'jquery',
+    'Magento_Customer/js/customer-data'
+], function($, customerData) {
+    'use strict';
+
+    var MetrikaSectionLoader = {
+        containerName: 'dataLayer',
+
+        /**
+         * Process metrika data from section
+         */
+        processMetrikaData: function(data) {
+            if (!data) {
+                return;
+            }
+
+            var items = Object.keys(data)
+                .filter(function(key) { return key !== 'data_id'; })
+                .map(function(key) { return data[key]; });
+
+            if (items.length > 0) {
+                window[this.containerName] = window[this.containerName] || [];
+                items.forEach(function(item) {
+                    if (item && item.ecommerce) {
+                        window[this.containerName].push(item);
+                    }
+                }.bind(this));
+            }
+        },
+
+        /**
+         * Initialize metrika section loader
+         */
+        init: function() {
+            // Load initial data
+            customerData.reload(['metrika'], false).done(function() {
+                var data = customerData.get('metrika')();
+                this.processMetrikaData(data);
+            }.bind(this));
+
+            // Subscribe to future updates
+            customerData.get('metrika').subscribe(function(data) {
+                this.processMetrikaData(data);
+            }.bind(this));
+        }
+    };
+
+    return MetrikaSectionLoader;
+});

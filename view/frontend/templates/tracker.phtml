@@ -13,6 +13,15 @@ if ($betaPlayer) {
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">window.<?php echo $block->getConfig('container_name');?> = window.<?php echo $block->getConfig('container_name');?> || []; (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter<?php echo $code;?> = new <?php echo $counterClass ?>(<?php echo json_encode($options);?>); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "<?php echo $counterCallbacks ?>");</script><noscript><div><img src="https://mc.yandex.ru/watch/<?php echo $code;?>" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
+
+<!-- Load Metrika data section -->
+<script>
+require(['Mygento_Metrika/js/metrika-section-loader'], function(loader) {
+    loader.containerName = '<?php echo $block->getConfig('container_name');?>';
+    loader.init();
+});
+</script>
+
 <?php
 $dynamic = $block->getDynamicTrackers();
 if (count($dynamic) > 0) {
