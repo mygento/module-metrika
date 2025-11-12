@@ -8,8 +8,11 @@
 
 namespace Mygento\Metrika\Block;
 
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
+use Mygento\Base\Api\ProductAttributeHelperInterface;
 use Mygento\Base\Helper\Data;
 
 /**
@@ -26,11 +29,11 @@ class Tracker extends \Magento\Framework\View\Element\Template
 
     public function __construct(
         private StoreManagerInterface $storeManager,
-        protected \Mygento\Base\Helper\Data $helper,
-        protected \Mygento\Base\Api\ProductAttributeHelperInterface $attributeHelper,
-        protected \Magento\Framework\Registry $coreRegistry,
-        protected \Magento\Framework\Json\Helper\Data $jsonHelper,
-        protected \Magento\Framework\View\Element\Template\Context $context,
+        protected Data $helper,
+        protected ProductAttributeHelperInterface $attributeHelper,
+        protected Registry $coreRegistry,
+        protected JsonHelper $jsonHelper,
+        protected Context $context,
         array $data = [],
     ) {
         parent::__construct($context, $data);

@@ -18,7 +18,8 @@ define([
         options: {
             categoryName: '',
             containerName: 'dataLayer',
-            currencyCode: ''
+            currencyCode: '',
+            productSelector: '.product-item-info'
         },
 
         /**
@@ -51,7 +52,7 @@ define([
 
                         if (!trackedProducts.has(productId)) {
                             trackedProducts.add(productId);
-                            var position = $product.parent().children('.product-item, .product-item-info').index($product) + 1;
+                            var position = $product.parent().children(self.options.productSelector).index($product) + 1;
                             var productData = self._getImpressionData($product, position);
 
                             pendingProducts.push(productData);
@@ -69,7 +70,7 @@ define([
             }, observerOptions);
 
             // Observe all products
-            this.element.find('.product-item, .product-item-info').each(function() {
+            this.element.find(this.options.productSelector).each(function() {
                 observer.observe(this);
             });
         },
@@ -98,16 +99,16 @@ define([
         _bindEvents: function() {
             var self = this;
             
-            $(document).on('click', '.product-item a, .product-image, .product-item-info a', function(e) {
+            $(document).on('click', this.options.productSelector + ' a', function(e) {
                 self._trackProductClick($(this));
             });
         },
 
         _trackProductClick: function($link) {
-            var $productElement = $link.closest('.product-item, .product-item-info');
+            var $productElement = $link.closest(this.options.productSelector);
             if (!$productElement.length) return;
 
-            var position = $productElement.parent().children('.product-item, .product-item-info').index($productElement) + 1;
+            var position = $productElement.parent().children(this.options.productSelector).index($productElement) + 1;
             var productData = this._getProductData($productElement, position);
             
             if (!productData.id) return;
