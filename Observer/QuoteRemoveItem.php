@@ -2,7 +2,7 @@
 
 /**
  * @author Mygento Team
- * @copyright 2015-2022 Mygento (https://www.mygento.ru)
+ * @copyright 2015-2025 Mygento (https://www.mygento.com)
  * @package Mygento_Metrika
  */
 
@@ -39,7 +39,7 @@ class QuoteRemoveItem implements \Magento\Framework\Event\ObserverInterface
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Mygento\Base\Api\ProductAttributeHelperInterface $productHelper,
-        \Mygento\Base\Helper\Data $helper
+        \Mygento\Base\Helper\Data $helper,
     ) {
         $this->session = $session;
         $this->productHelper = $productHelper;
@@ -64,7 +64,7 @@ class QuoteRemoveItem implements \Magento\Framework\Event\ObserverInterface
                     'products' => [
                         'id' => (string) $this->productHelper->getValueByConfigPathOrDefault(
                             'metrika/general/skuAttr',
-                            $product->getId()
+                            $product->getId(),
                         ),
                         'name' => $product->getName(),
                     ],

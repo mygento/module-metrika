@@ -2,7 +2,7 @@
 
 /**
  * @author Mygento Team
- * @copyright 2015-2022 Mygento (https://www.mygento.ru)
+ * @copyright 2015-2025 Mygento (https://www.mygento.com)
  * @package Mygento_Metrika
  */
 
@@ -29,7 +29,7 @@ class Product extends \Mygento\Metrika\Block\Tracker
         $prodData = [
             'id' => (string) $this->attributeHelper->getValueByConfigPathOrDefault(
                 'metrika/general/skuAttr',
-                $currentProduct->getId()
+                $currentProduct->getId(),
             ),
             'name' => $currentProduct->getName(),
             'price' => round($currentProduct->getFinalPrice(), 2),

@@ -2,7 +2,7 @@
 
 /**
  * @author Mygento Team
- * @copyright 2015-2022 Mygento (https://www.mygento.ru)
+ * @copyright 2015-2025 Mygento (https://www.mygento.com)
  * @package Mygento_Metrika
  */
 
@@ -59,7 +59,7 @@ class Tracker extends \Magento\Framework\View\Element\Template
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Framework\View\Element\Template\Context $context,
-        array $data = []
+        array $data = [],
     ) {
         parent::__construct($context, $data);
         $this->jsonHelper = $jsonHelper;
