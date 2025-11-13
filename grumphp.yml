@@ -16,6 +16,5 @@ grumphp:
       warning_severity: 0
     xmllint:
     phpstan:
-      autoload_file: 'vendor/mygento/coding-standard/stan/autoload.php'
       ignore_patterns: ['Test']
       level: 1
