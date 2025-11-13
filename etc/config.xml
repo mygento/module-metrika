@@ -15,7 +15,6 @@
                 <noindex>0</noindex>
                 <ecommerce>1</ecommerce>
                 <skuAttr>sku</skuAttr>
-                <product_selector>.product-item-info</product_selector>
             </general>
         </metrika>
         <csp>

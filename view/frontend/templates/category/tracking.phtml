@@ -18,8 +18,7 @@ require([
     $('.products-grid, .products-list').categoryTracking({
         categoryName: '<?php echo $category->getName(); ?>',
         containerName: '<?php echo $block->getConfig('container_name'); ?>',
-        currencyCode: '<?php echo $block->getCurrentCurrencyCode(); ?>',
-        productSelector: '<?php echo $block->getConfig('product_selector'); ?>'
+        currencyCode: '<?php echo $block->getCurrentCurrencyCode(); ?>'
     });
 });
 </script>

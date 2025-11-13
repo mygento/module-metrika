@@ -39,12 +39,6 @@ define([
          * Initialize metrika section loader
          */
         init: function() {
-            // Load initial data
-            customerData.reload(['metrika'], false).done(function() {
-                var data = customerData.get('metrika')();
-                this.processMetrikaData(data);
-            }.bind(this));
-
             // Subscribe to future updates
             customerData.get('metrika').subscribe(function(data) {
                 this.processMetrikaData(data);

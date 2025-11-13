@@ -12,5 +12,3 @@ noindex,"Запретить индексацию страниц со счетч�
 ecommerce,"Собирать данные электронной коммерции  (Ecommerce)"
 "Product code attribute","Аттрибут кода товара"
 Debug,Отладка
-"Product CSS selector","CSS селектор продукта"
-"For example .product-item-info","Например .product-item-info"
