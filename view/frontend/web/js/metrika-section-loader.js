@@ -21,9 +21,7 @@ define([
                 return;
             }
 
-            var items = Object.keys(data)
-                .filter(function(key) { return key !== 'data_id'; })
-                .map(function(key) { return data[key]; });
+            var items = Object.values(data);
 
             if (items.length > 0) {
                 window[this.containerName] = window[this.containerName] || [];
