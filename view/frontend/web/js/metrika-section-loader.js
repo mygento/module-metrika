@@ -40,6 +40,7 @@ define([
             // Subscribe to future updates
             customerData.get('metrika').subscribe(function(data) {
                 this.processMetrikaData(data);
+                customerData.invalidate(['metrika']);
             }.bind(this));
         }
     };

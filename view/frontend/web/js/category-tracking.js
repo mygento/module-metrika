@@ -27,70 +27,50 @@ define([
          */
         _create: function() {
             this._bindEvents();
-            this._initIntersectionObserver();
+            this._sendImpressions();
         },
 
         /**
-         * Initialize Intersection Observer for product visibility tracking
+         * Send product impressions
          */
-        _initIntersectionObserver: function() {
+        _sendImpressions: function() {
             var self = this;
-            var trackedProducts = new Set();
-            var pendingProducts = [];
-            var sendTimeout = null;
+            var products = [];
+            var position = 1;
 
-            var observerOptions = {
-                threshold: 0.5 // 50% of product must be visible
-            };
+            // Collect all visible products, avoid duplicates
+            var $products = this.element.find(this.options.productSelector);
+            var seenIds = new Set();
 
-            var observer = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        var $product = $(entry.target);
-                        var productId = $product.find('[data-product-sku]').data('product-sku') || 
-                                       $product.find('[data-product-id]').data('product-id');
+            $products.each(function() {
+                var $product = $(this);
+                var productId = $product.find('[data-product-sku]').data('product-sku') || $product.find('[data-product-id]').data('product-id');
 
-                        if (!trackedProducts.has(productId)) {
-                            trackedProducts.add(productId);
-                            var position = $product.parent().children(self.options.productSelector).index($product) + 1;
-                            var productData = self._getImpressionData($product, position);
-
-                            pendingProducts.push(productData);
-                        }
-                    }
-                });
-
-                // Wait 100ms to collect more products
-                clearTimeout(sendTimeout);
-                sendTimeout = setTimeout(function() {
-                    if (pendingProducts.length) {
-                        self._sendBatchImpressions(pendingProducts.splice(0));
-                    }
-                }, 100);
-            }, observerOptions);
-
-            // Observe all products
-            this.element.find(this.options.productSelector).each(function() {
-                observer.observe(this);
-            });
-        },
-
-        /**
-         * Send batch of product impressions
-         */
-        _sendBatchImpressions: function(products) {
-            if (products.length === 0) {
-                return;
-            }
-
-            var impressionsData = {
-                'ecommerce': {
-                    'currencyCode': this.options.currencyCode,
-                    'impressions': products
+                // Skip if already processed this product
+                if (seenIds.has(productId)) {
+                    return;
                 }
-            };
 
-            window[this.options.containerName].push(impressionsData);
+                seenIds.add(productId);
+
+                var productData = self._getImpressionData($product, position);
+
+                if (productData.id) {
+                    products.push(productData);
+                    position++;
+                }
+            });
+
+            if (products.length) {
+                var impressionsData = {
+                    'ecommerce': {
+                        'currencyCode': this.options.currencyCode,
+                        'impressions': products
+                    }
+                };
+
+                window[this.options.containerName].push(impressionsData);
+            }
         },
 
         /**
