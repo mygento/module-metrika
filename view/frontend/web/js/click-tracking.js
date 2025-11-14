@@ -12,9 +12,9 @@ define([
     'use strict';
 
     /**
-     * Category product tracking widget
+     * Product click tracking widget
      */
-    $.widget('mygento.categoryTracking', {
+    $.widget('mygento.clickTracking', {
         options: {
             categoryName: '',
             containerName: 'dataLayer',
@@ -27,50 +27,6 @@ define([
          */
         _create: function() {
             this._bindEvents();
-            this._sendImpressions();
-        },
-
-        /**
-         * Send product impressions
-         */
-        _sendImpressions: function() {
-            var self = this;
-            var products = [];
-            var position = 1;
-
-            // Collect all visible products, avoid duplicates
-            var $products = this.element.find(this.options.productSelector);
-            var seenIds = new Set();
-
-            $products.each(function() {
-                var $product = $(this);
-                var productId = $product.find('[data-product-sku]').data('product-sku') || $product.find('[data-product-id]').data('product-id');
-
-                // Skip if already processed this product
-                if (seenIds.has(productId)) {
-                    return;
-                }
-
-                seenIds.add(productId);
-
-                var productData = self._getImpressionData($product, position);
-
-                if (productData.id) {
-                    products.push(productData);
-                    position++;
-                }
-            });
-
-            if (products.length) {
-                var impressionsData = {
-                    'ecommerce': {
-                        'currencyCode': this.options.currencyCode,
-                        'impressions': products
-                    }
-                };
-
-                window[this.options.containerName].push(impressionsData);
-            }
         },
 
         /**
@@ -105,23 +61,7 @@ define([
             window[this.options.containerName].push(clickData);
         },
 
-        /**
-         * Extract product data from DOM element for impressions
-         */
-        _getImpressionData: function($productElement, position) {
-            return this._getBaseProductData($productElement, position);
-        },
-
-        /**
-         * Extract product data from DOM element for clicks
-         */
         _getProductData: function($productElement, position) {
-            var baseData = this._getBaseProductData($productElement, position);
-            baseData.quantity = 1;
-            return baseData;
-        },
-
-        _getBaseProductData: function($productElement, position) {
             return {
                 'id': $productElement.find('[data-product-sku]').data('product-sku') || $productElement.find('[data-product-id]').data('product-id'),
                 'name': $productElement.find('.product-item-name, .product-name, .product-item-link').first().text().trim().replace(/\s+/g, ' '),
@@ -129,6 +69,7 @@ define([
                 'category': this.options.categoryName,
                 'list': this.options.categoryName,
                 'position': position,
+                'quantity': 1,
 
             };
         },
@@ -140,5 +81,5 @@ define([
         },
     });
 
-    return $.mygento.categoryTracking;
+    return $.mygento.clickTracking;
 });

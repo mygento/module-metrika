@@ -1,0 +1,35 @@
+<?php
+/** @var $block Impression */
+
+use Mygento\Metrika\Block\Tracker\Impression;
+
+$items = $block->getImpressionItems();
+
+$currencyCode = $block->getCurrentCurrencyCode();
+$categoryName = $block->getCategoryName();
+$productSelector = $block->getProductSelector();
+$containerName = $block->getConfig('container_name');
+?>
+
+<script>
+    (function(containerName, payload) {
+        window[containerName] = window[containerName] || [];
+        window[containerName].push(payload);
+    })('<?php echo $containerName; ?>', {
+        ecommerce: {
+            currencyCode: '<?php echo $block->escapeJs($currencyCode); ?>',
+            impressions: <?= json_encode($items); ?>
+        }
+    });
+</script>
+
+<script>
+require(['jquery', 'Mygento_Metrika/js/click-tracking'], function($) {
+    $('body').clickTracking({
+        categoryName: '<?php echo $block->escapeJs($categoryName); ?>',
+        containerName: '<?php echo $containerName; ?>',
+        currencyCode: '<?php echo $block->escapeJs($currencyCode); ?>',
+        productSelector: '<?php echo $block->escapeJs($productSelector); ?>'
+    });
+});
+</script>

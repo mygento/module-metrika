@@ -3,6 +3,20 @@
     <body>
         <referenceContainer name="mygento_metrika">
             <block class="Mygento\Metrika\Block\Tracker\Product" name="mygento_metrika_product"/>
+            <block class="Mygento\Metrika\Block\Tracker\Impression" name="mygento_metrika_related_products_impression" template="Mygento_Metrika::impression.phtml">
+                <arguments>
+                    <argument name="list_type" xsi:type="string">related</argument>
+                    <argument name="block_name" xsi:type="string">catalog.product.related</argument>
+                    <argument name="show_category" xsi:type="boolean">true</argument>
+                </arguments>
+            </block>
+            <block class="Mygento\Metrika\Block\Tracker\Impression" name="mygento_metrika_upsell_products_impression" template="Mygento_Metrika::impression.phtml">
+                <arguments>
+                    <argument name="list_type" xsi:type="string">upsell</argument>
+                    <argument name="block_name" xsi:type="string">product.info.upsell</argument>
+                    <argument name="show_category" xsi:type="boolean">true</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>
