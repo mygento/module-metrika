@@ -6,6 +6,7 @@
                 <arguments>
                     <argument name="list_type" xsi:type="string">catalog</argument>
                     <argument name="block_name" xsi:type="string">category.products.list</argument>
+                    <argument name="product_selector" xsi:type="string">.product-item-info</argument>
                     <argument name="show_category" xsi:type="boolean">true</argument>
                 </arguments>
             </block>

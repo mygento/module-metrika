@@ -6,6 +6,7 @@
                 <arguments>
                     <argument name="list_type" xsi:type="string">crosssell</argument>
                     <argument name="block_name" xsi:type="string">checkout.cart.crosssell</argument>
+                    <argument name="product_selector" xsi:type="string">.product-item-info</argument>
                 </arguments>
             </block>
         </referenceContainer>

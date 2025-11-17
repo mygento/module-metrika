@@ -10,7 +10,7 @@ $categoryName = $block->getCategoryName();
 $productSelector = $block->getProductSelector();
 $containerName = $block->getConfig('container_name');
 ?>
-
+<?php if (!empty($items)): ?>
 <script>
     (function(containerName, payload) {
         window[containerName] = window[containerName] || [];
@@ -22,6 +22,7 @@ $containerName = $block->getConfig('container_name');
         }
     });
 </script>
+<?php endif; ?>
 
 <script>
 require(['jquery', 'Mygento_Metrika/js/click-tracking'], function($) {

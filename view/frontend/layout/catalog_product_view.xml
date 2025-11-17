@@ -7,6 +7,7 @@
                 <arguments>
                     <argument name="list_type" xsi:type="string">related</argument>
                     <argument name="block_name" xsi:type="string">catalog.product.related</argument>
+                    <argument name="product_selector" xsi:type="string">.product-item-info</argument>
                     <argument name="show_category" xsi:type="boolean">true</argument>
                 </arguments>
             </block>
@@ -14,9 +15,11 @@
                 <arguments>
                     <argument name="list_type" xsi:type="string">upsell</argument>
                     <argument name="block_name" xsi:type="string">product.info.upsell</argument>
+                    <argument name="product_selector" xsi:type="string">.product-item-info</argument>
                     <argument name="show_category" xsi:type="boolean">true</argument>
                 </arguments>
             </block>
         </referenceContainer>
     </body>
 </page>
+
