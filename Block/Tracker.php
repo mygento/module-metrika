@@ -28,7 +28,7 @@ class Tracker extends \Magento\Framework\View\Element\Template
     protected $session;
 
     public function __construct(
-        private StoreManagerInterface $storeManager,
+        protected StoreManagerInterface $storeManager,
         protected Data $helper,
         protected ProductAttributeHelperInterface $attributeHelper,
         protected Registry $coreRegistry,

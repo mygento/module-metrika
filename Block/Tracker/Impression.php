@@ -25,7 +25,7 @@ class Impression extends Tracker
 {
     public function __construct(
         private Cart $cart,
-        private StoreManagerInterface $storeManager,
+        StoreManagerInterface $storeManager,
         Data $helper,
         ProductAttributeHelperInterface $attributeHelper,
         Registry $coreRegistry,
