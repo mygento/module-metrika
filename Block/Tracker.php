@@ -11,7 +11,6 @@ namespace Mygento\Metrika\Block;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Store\Model\StoreManagerInterface;
 use Mygento\Base\Api\ProductAttributeHelperInterface;
 use Mygento\Base\Helper\Data;
 
@@ -28,7 +27,6 @@ class Tracker extends \Magento\Framework\View\Element\Template
     protected $session;
 
     public function __construct(
-        protected StoreManagerInterface $storeManager,
         protected Data $helper,
         protected ProductAttributeHelperInterface $attributeHelper,
         protected Registry $coreRegistry,
@@ -134,7 +132,7 @@ class Tracker extends \Magento\Framework\View\Element\Template
 
     public function getCurrentCurrencyCode(): string
     {
-        return $this->storeManager->getStore()->getCurrentCurrencyCode();
+        return $this->_storeManager->getStore()->getCurrentCurrencyCode();
     }
 
     /**
