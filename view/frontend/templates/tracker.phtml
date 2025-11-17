@@ -1,7 +1,7 @@
 <?php
 $code = $block->getCode();
 $options = $block->getOptions();
-
+$currencyCode = $block->getCurrentCurrencyCode();
 $counterClass = 'Ya.Metrika';
 $counterCallbacks = 'yandex_metrika_callbacks';
 $betaPlayer = $this->getConfig('beta_player');
@@ -17,7 +17,8 @@ if ($betaPlayer) {
 <script>
 require(['jquery', 'Mygento_Metrika/js/cart-tracking'], function($) {
     $('body').cartTracking({
-        containerName: '<?php echo $block->getConfig('container_name');?>'
+        containerName: '<?php echo $block->getConfig('container_name');?>',
+        currencyCode: '<?php echo $block->escapeJs($currencyCode); ?>',
     });
 });
 </script>

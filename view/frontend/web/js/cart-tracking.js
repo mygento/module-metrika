@@ -151,7 +151,7 @@ define([
         },
 
         _extractProductData: function(cartItem) {
-            if(!cartItem.length) {
+            if(!Object.keys(cartItem).length) {
                 return {};
             }
 

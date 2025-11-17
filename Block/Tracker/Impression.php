@@ -135,7 +135,7 @@ class Impression extends Tracker
 
         $productCollection = $this->getListBlock()->getLoadedProductCollection();
 
-        if ($this->cart->getItemsCount()) {
+        if (empty($productCollection) && $this->cart->getItemsCount()) {
             $productCollection = $this->getListBlock()->getItemCollection();
         }
 
