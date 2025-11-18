@@ -131,20 +131,10 @@ class Impression extends Tracker
             return null;
         }
 
-        $productCollection = $this->getListBlock()->getLoadedProductCollection();
-
-        if (empty($productCollection) && $this->cart->getItemsCount()) {
-            $productCollection = $this->getListBlock()->getItemCollection();
+        if (in_array($this->getListType(), ['related', 'crosssell', 'upsell'])) {
+            return  $this->getListBlock()->getItemCollection() ?: $this->getListBlock()->getItems();
         }
 
-        if (
-            empty($productCollection)
-            && ($this->getBlockName() == 'catalog.product.related'
-                || $this->getBlockName() == 'checkout.cart.crosssell')
-        ) {
-            $productCollection = $this->getListBlock()->getItems();
-        }
-
-        return $productCollection;
+        return $this->getListBlock()->getLoadedProductCollection();
     }
 }
