@@ -2,34 +2,33 @@
 $code = $block->getCode();
 $options = $block->getOptions();
 $currencyCode = $block->getCurrentCurrencyCode();
-$counterClass = 'Ya.Metrika';
-$counterCallbacks = 'yandex_metrika_callbacks';
-$betaPlayer = $this->getConfig('beta_player');
-if ($betaPlayer) {
-    $counterClass .= '2';
-    $counterCallbacks .= '2';
-}
 ?>
 <!-- Yandex.Metrika counter -->
-<script type="text/javascript">window.<?php echo $block->getConfig('container_name');?> = window.<?php echo $block->getConfig('container_name');?> || []; (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter<?php echo $code;?> = new <?php echo $counterClass ?>(<?php echo json_encode($options);?>); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "<?php echo $counterCallbacks ?>");</script><noscript><div><img src="https://mc.yandex.ru/watch/<?php echo $code;?>" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<script type="text/javascript">
+    window.<?php echo $block->getConfig('container_name');?> = window.<?php echo $block->getConfig('container_name');?> || [];
+
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0];
+        k.async=1;k.src=r;a.parentNode.insertBefore(k,a);
+    })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+    ym(<?php echo $code;?>, "init", <?php echo json_encode($options);?>);
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/<?php echo $code;?>" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 
-<script>
-require(['jquery', 'Mygento_Metrika/js/cart-tracking'], function($) {
-    $('body').cartTracking({
-        containerName: '<?php echo $block->getConfig('container_name');?>',
-        currencyCode: '<?php echo $block->escapeJs($currencyCode); ?>',
-    });
-});
+<script type="text/x-magento-init">
+    {
+        "body": {
+            "Mygento_Metrika/js/cart-tracking": {
+                "containerName": "<?php echo $block->getConfig('container_name');?>",
+                "currencyCode": "<?php echo $block->escapeJs($currencyCode); ?>"
+            }
+        }
+    }
 </script>
 
 <?php
-$dynamic = $block->getDynamicTrackers();
-if (count($dynamic) > 0) {
-    echo '<script type="text/javascript">';
-    foreach ($dynamic as $d) {
-        echo $block->getConfig('container_name') . '.push(' . $block->jsonEncode($d) . ');' . "\n";
-    }
-    echo '</script>';
-}
 echo $block->getChildHtml();

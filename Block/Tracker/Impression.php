@@ -9,12 +9,7 @@
 namespace Mygento\Metrika\Block\Tracker;
 
 use Magento\Catalog\Model\Category;
-use Magento\Checkout\Helper\Cart;
-use Magento\Framework\Registry;
 use Magento\Framework\View\Element\BlockInterface;
-use Magento\Framework\View\Element\Template\Context;
-use Mygento\Base\Api\ProductAttributeHelperInterface;
-use Mygento\Base\Helper\Data;
 use Mygento\Metrika\Block\Tracker;
 
 /**
@@ -22,18 +17,6 @@ use Mygento\Metrika\Block\Tracker;
  */
 class Impression extends Tracker
 {
-    public function __construct(
-        private Cart $cart,
-        Data $helper,
-        ProductAttributeHelperInterface $attributeHelper,
-        Registry $coreRegistry,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
-        Context $context,
-        array $data = [],
-    ) {
-        parent::__construct($helper, $attributeHelper, $coreRegistry, $jsonHelper, $context, $data);
-    }
-
     public function getCurrentCategory(): ?Category
     {
         /** @var Category $category */

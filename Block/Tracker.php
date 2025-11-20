@@ -39,22 +39,6 @@ class Tracker extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get Dynamic tracker through events
-     * @return array
-     */
-    public function getDynamicTrackers()
-    {
-        $data = $this->session->getMetrika();
-        if ($data && is_array($data)) {
-            $this->session->unsMetrika();
-
-            return $data;
-        }
-
-        return [];
-    }
-
-    /**
      *  Get parameters for counter
      *
      * @return array

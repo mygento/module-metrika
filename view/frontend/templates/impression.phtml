@@ -24,13 +24,15 @@ $containerName = $block->getConfig('container_name');
 </script>
 <?php endif; ?>
 
-<script>
-require(['jquery', 'Mygento_Metrika/js/click-tracking'], function($) {
-    $('body').clickTracking({
-        categoryName: '<?php echo $block->escapeJs($categoryName); ?>',
-        containerName: '<?php echo $containerName; ?>',
-        currencyCode: '<?php echo $block->escapeJs($currencyCode); ?>',
-        productSelector: '<?php echo $block->escapeJs($productSelector); ?>'
-    });
-});
+<script type="text/x-magento-init">
+    {
+        "body": {
+            "Mygento_Metrika/js/click-tracking": {
+                "categoryName": "<?php echo $block->escapeJs($categoryName); ?>",
+                "containerName": "<?php echo $containerName; ?>",
+                "currencyCode": "<?php echo $block->escapeJs($currencyCode); ?>",
+                "productSelector": "<?php echo $block->escapeJs($productSelector); ?>"
+            }
+        }
+    }
 </script>

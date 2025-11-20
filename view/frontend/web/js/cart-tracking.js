@@ -27,33 +27,33 @@ define([
          * Widget initialization
          */
         _create: function() {
-            this._initContainer();
+            this.initContainer();
             this.temporaryEventStorage = [];
             this.cartItemsCache = [];
-            this._bindEvents();
-            this._setCartDataListener();
+            this.bindEvents();
+            this.setCartDataListener();
         },
 
-        _initContainer: function() {
+        initContainer: function() {
             window[this.options.containerName] = window[this.options.containerName] || [];
         },
 
-        _bindEvents: function() {
+        bindEvents: function() {
             var self = this;
 
             $(document).on(this.options.addEventName, function(event, data) {
-                self._setToTemporaryEventStorage(self.options.addEventName, data || {});
+                self.setToTemporaryEventStorage(self.options.addEventName, data || {});
             });
 
             $(document).on(this.options.removeEventName, function(event, data) {
-                self._setToTemporaryEventStorage(self.options.removeEventName, data || {});
+                self.setToTemporaryEventStorage(self.options.removeEventName, data || {});
             });
         },
 
         /**
          * Store event to temporary storage until cart data is updated
          */
-        _setToTemporaryEventStorage: function(eventType, eventData) {
+        setToTemporaryEventStorage: function(eventType, eventData) {
             this.temporaryEventStorage.push({
                 type: eventType,
                 data: eventData
@@ -63,12 +63,12 @@ define([
         /**
          * Subscribe to cart data updates
          */
-        _setCartDataListener: function() {
+        setCartDataListener: function() {
             var self = this;
 
             customerData.get('cart').subscribe(function(data) {
                 if (self.temporaryEventStorage.length) {
-                    self._executeEvents(data);
+                    self.executeEvents(data);
                 }
 
                 self.cartItemsCache = data.items ? data.items.slice() : [];
@@ -78,7 +78,7 @@ define([
         /**
          * Execute pending events with full product data from cart
          */
-        _executeEvents: function(cartData) {
+        executeEvents: function(cartData) {
             var self = this;
             var items = cartData.items || [];
 
@@ -91,14 +91,14 @@ define([
                 }
 
                 productInfo.forEach(function(info) {
-
-
+                    var cartItem = self.findCartItem(items, info);
+                    var cartItemCache = self.findCartItem(self.cartItemsCache, info);
+                    var qty = cartItem && cartItemCache
+                        ? Math.abs(cartItem.qty - cartItemCache.qty) : cartItem ? cartItem.qty : cartItemCache.qty;
                     if (event.type === self.options.addEventName) {
-                        var cartItem = self._findCartItem(items, info);
-                        self._handleAddToCart(cartItem);
+                        self.handleAddToCart(cartItem, qty);
                     } else if (event.type === self.options.removeEventName) {
-                        var cartItemCache = self._findCartItem(self.cartItemsCache, info);
-                        self._handleRemoveFromCart(cartItemCache);
+                        self.handleRemoveFromCart(cartItemCache, qty);
                     }
                 });
             });
@@ -109,7 +109,7 @@ define([
         /**
          * Find cart item by product id
          */
-        _findCartItem: function(items, productInfo) {
+        findCartItem: function(items, productInfo) {
             var productId = productInfo.id;
 
             for (var i = 0; i < items.length; i++) {
@@ -121,20 +121,21 @@ define([
             return null;
         },
 
-        _handleAddToCart: function(cartItem) {
-            this._trackCartEvent('add', cartItem);
+        handleAddToCart: function(cartItem, qty) {
+            this.trackCartEvent('add', cartItem, qty);
         },
 
-        _handleRemoveFromCart: function(cartItem) {
-            this._trackCartEvent('remove', cartItem);
+        handleRemoveFromCart: function(cartItem, qty) {
+            this.trackCartEvent('remove', cartItem, qty);
         },
 
-        _trackCartEvent: function(action, cartItem) {
-            var item = this._extractProductData(cartItem);
+        trackCartEvent: function(action, cartItem, qty) {
+            var item = this.extractProductData(cartItem);
 
             if (!item.id) {
                 return;
             }
+            item.quantity = qty;
 
             var ecommerceData = {};
             ecommerceData[action] = {
@@ -150,7 +151,7 @@ define([
             });
         },
 
-        _extractProductData: function(cartItem) {
+        extractProductData: function(cartItem) {
             if(!Object.keys(cartItem).length) {
                 return {};
             }
@@ -159,7 +160,6 @@ define([
                 id: cartItem['product_sku'] || cartItem['product_id'] || cartItem['product_name'],
                 name: cartItem['product_name'] ,
                 price: cartItem['product_price_value'] ,
-                quantity: cartItem.qty
             };
         }
     });

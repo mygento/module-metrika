@@ -26,26 +26,26 @@ define([
          * Widget initialization
          */
         _create: function() {
-            this._bindEvents();
+            this.bindEvents();
         },
 
         /**
          * Bind click events to product links
          */
-        _bindEvents: function() {
+        bindEvents: function() {
             var self = this;
             
             $(document).on('click', this.options.productSelector + ' a', function(e) {
-                self._trackProductClick($(this));
+                self.trackProductClick($(this));
             });
         },
 
-        _trackProductClick: function($link) {
+        trackProductClick: function($link) {
             var $productElement = $link.closest(this.options.productSelector);
             if (!$productElement.length) return;
 
             var position = $productElement.parent().children(this.options.productSelector).index($productElement) + 1;
-            var productData = this._getProductData($productElement, position);
+            var productData = this.getProductData($productElement, position);
             
             if (!productData.id) return;
 
@@ -61,11 +61,11 @@ define([
             window[this.options.containerName].push(clickData);
         },
 
-        _getProductData: function($productElement, position) {
+        getProductData: function($productElement, position) {
             return {
                 'id': $productElement.find('[data-product-sku]').data('product-sku') || $productElement.find('[data-product-id]').data('product-id'),
                 'name': $productElement.find('.product-item-name, .product-name, .product-item-link').first().text().trim().replace(/\s+/g, ' '),
-                'price': this._getProductPrice($productElement),
+                'price': this.getProductPrice($productElement),
                 'category': this.options.categoryName,
                 'list': this.options.categoryName,
                 'position': position,
@@ -74,7 +74,7 @@ define([
             };
         },
 
-        _getProductPrice: function($productElement) {
+        getProductPrice: function($productElement) {
             var priceText = $productElement.find('.price').text().trim();
             var price = parseFloat(priceText.replace(/[^\d.,]/g, '').replace(',', '.'));
             return isNaN(price) ? 0 : price;
