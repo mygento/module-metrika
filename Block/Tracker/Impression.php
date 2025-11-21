@@ -106,7 +106,7 @@ class Impression extends Tracker
         return $this->getLayout()->getBlock($this->getBlockName());
     }
 
-    private function getProductCollection()
+    private function getProductCollection(): mixed
     {
         if (!$this->getListBlock()) {
             return null;
