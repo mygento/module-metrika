@@ -66,6 +66,10 @@ define([
         setCartDataListener: function() {
             const self = this;
 
+            const cart = customerData.get('cart');
+            const initial = cart();
+            self.cartItemsCache = initial.items ? initial.items.slice() : [];
+
             customerData.get('cart').subscribe(function(data) {
                 if (self.temporaryEventStorage.length) {
                     self.executeEvents(data);
@@ -84,23 +88,18 @@ define([
 
             this.temporaryEventStorage.forEach(function(event) {
                 const eventData = event.data;
-                let productInfo = eventData.productInfo || [];
 
-                if (!Array.isArray(productInfo)) {
-                    productInfo = [productInfo];
+                const cartItem = self.findCartItem(items, eventData);
+                let cartItemCache = self.findCartItem(self.cartItemsCache, eventData);
+                const qty = cartItem && cartItemCache
+                    ? Math.abs((cartItem?.qty ?? 0) - (cartItemCache?.qty ?? 0))
+                    : (cartItem?.qty ?? cartItemCache?.qty ?? 0);
+                if (event.type === self.options.addEventName) {
+                    self.handleAddToCart(cartItem, qty);
+                } else if (event.type === self.options.removeEventName) {
+                    self.handleRemoveFromCart(cartItemCache, qty);
                 }
 
-                productInfo.forEach(function(info) {
-                    const cartItem = self.findCartItem(items, info);
-                    const cartItemCache = self.findCartItem(self.cartItemsCache, info);
-                    const qty = cartItem && cartItemCache
-                        ? Math.abs(cartItem.qty - cartItemCache.qty) : cartItem ? cartItem.qty : cartItemCache.qty;
-                    if (event.type === self.options.addEventName) {
-                        self.handleAddToCart(cartItem, qty);
-                    } else if (event.type === self.options.removeEventName) {
-                        self.handleRemoveFromCart(cartItemCache, qty);
-                    }
-                });
             });
 
             this.temporaryEventStorage = [];
@@ -109,11 +108,12 @@ define([
         /**
          * Find cart item by product id
          */
-        findCartItem: function(items, productInfo) {
-            const productId = productInfo.id;
+        findCartItem: function(items, data) {
+
+            const productId = (data.productInfo?.length === 1 && data.productInfo[0]?.id) || '';
 
             for (let i = 0; i < items.length; i++) {
-                if (items[i]['product_id'] === productId) {
+                if (items[i]['product_id'] === productId || items[i]['product_sku'] === (data.sku || '')) {
                     return items[i];
                 }
             }
@@ -152,7 +152,7 @@ define([
         },
 
         extractProductData: function(cartItem) {
-            if(!Object.keys(cartItem).length) {
+            if (!Object.keys(cartItem ?? {}).length) {
                 return {};
             }
 
