@@ -90,7 +90,7 @@ define([
                 const eventData = event.data;
 
                 const cartItem = self.findCartItem(items, eventData);
-                let cartItemCache = self.findCartItem(self.cartItemsCache, eventData);
+                const cartItemCache = self.findCartItem(self.cartItemsCache, eventData);
                 const qty = cartItem && cartItemCache
                     ? Math.abs((cartItem?.qty ?? 0) - (cartItemCache?.qty ?? 0))
                     : (cartItem?.qty ?? cartItemCache?.qty ?? 0);
