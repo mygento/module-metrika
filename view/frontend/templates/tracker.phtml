@@ -7,12 +7,13 @@ use Mygento\Metrika\Block\Tracker;
 
 $code = $block->getCode();
 $options = $block->getOptions();
-$currencyCode = $block->getCurrentCurrencyCode();
-$containerName = $block->getConfig('container_name');
+$currencyCode = $escaper->escapeJs($block->getCurrentCurrencyCode());
+$containerName = $escaper->escapeJs($block->getConfig('container_name'));
+$productIdAttr = $escaper->escapeJs($block->getConfig('skuAttr'));
 ?>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
-    window.<?php echo $block->getConfig('container_name');?> = window.<?php echo $block->getConfig('container_name');?> || [];
+    window.<?php echo $containerName;?> = window.<?php echo $containerName;?> || [];
 
     (function(m,e,t,r,i,k,a){
         m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -30,9 +31,9 @@ $containerName = $block->getConfig('container_name');
     {
         "body": {
             "Mygento_Metrika/js/cart-tracking": {
-                "containerName": "<?php echo $escaper->escapeJs($containerName);?>",
-                "currencyCode": "<?php echo $escaper->escapeJs($currencyCode); ?>",
-                "productIdAttr": "<?php echo $escaper->escapeJs($block->getConfig('skuAttr')); ?>"
+                "containerName": "<?php echo $containerName;?>",
+                "currencyCode": "<?php echo $currencyCode; ?>",
+                "productIdAttr": "<?php echo $productIdAttr; ?>"
             }
         }
     }
