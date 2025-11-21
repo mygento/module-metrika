@@ -1,0 +1,39 @@
+<?php
+/** @var $block Impression */
+/** @var $escaper \Magento\Framework\Escaper */
+
+use Mygento\Metrika\Block\Tracker\Impression;
+
+$items = $block->getImpressionItems();
+
+$currencyCode = $block->getCurrentCurrencyCode();
+$categoryName = $block->getCategoryName();
+$productSelector = $block->getProductSelector();
+$containerName = $block->getConfig('container_name');
+?>
+<?php if (!empty($items)): ?>
+<script>
+    (function(containerName, payload) {
+        window[containerName] = window[containerName] || [];
+        window[containerName].push(payload);
+    })('<?php echo $containerName; ?>', {
+        ecommerce: {
+            currencyCode: '<?php echo $block->escapeJs($currencyCode); ?>',
+            impressions: <?= $block->jsonEncode($items); ?>
+        }
+    });
+</script>
+<?php endif; ?>
+
+<script type="text/x-magento-init">
+    {
+        "body": {
+            "Mygento_Metrika/js/click-tracking": {
+                "categoryName": "<?php echo $escaper->escapeJs($categoryName); ?>",
+                "containerName": "<?php echo  $escaper->escapeJs($containerName); ?>",
+                "currencyCode": "<?php echo $escaper->escapeJs($currencyCode); ?>",
+                "productSelector": "<?php echo $escaper->escapeJs($productSelector); ?>"
+            }
+        }
+    }
+</script>
