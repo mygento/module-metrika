@@ -64,7 +64,7 @@ define([
          * Subscribe to cart data updates
          */
         setCartDataListener: function() {
-            var self = this;
+            const self = this;
 
             customerData.get('cart').subscribe(function(data) {
                 if (self.temporaryEventStorage.length) {
@@ -79,21 +79,21 @@ define([
          * Execute pending events with full product data from cart
          */
         executeEvents: function(cartData) {
-            var self = this;
-            var items = cartData.items || [];
+            const self = this;
+            const items = cartData.items || [];
 
             this.temporaryEventStorage.forEach(function(event) {
-                var eventData = event.data;
-                var productInfo = eventData.productInfo || [];
+                const eventData = event.data;
+                let productInfo = eventData.productInfo || [];
 
                 if (!Array.isArray(productInfo)) {
                     productInfo = [productInfo];
                 }
 
                 productInfo.forEach(function(info) {
-                    var cartItem = self.findCartItem(items, info);
-                    var cartItemCache = self.findCartItem(self.cartItemsCache, info);
-                    var qty = cartItem && cartItemCache
+                    const cartItem = self.findCartItem(items, info);
+                    const cartItemCache = self.findCartItem(self.cartItemsCache, info);
+                    const qty = cartItem && cartItemCache
                         ? Math.abs(cartItem.qty - cartItemCache.qty) : cartItem ? cartItem.qty : cartItemCache.qty;
                     if (event.type === self.options.addEventName) {
                         self.handleAddToCart(cartItem, qty);
@@ -110,7 +110,7 @@ define([
          * Find cart item by product id
          */
         findCartItem: function(items, productInfo) {
-            var productId = productInfo.id;
+            const productId = productInfo.id;
 
             for (var i = 0; i < items.length; i++) {
                 if (items[i]['product_id'] === productId) {
@@ -130,14 +130,14 @@ define([
         },
 
         trackCartEvent: function(action, cartItem, qty) {
-            var item = this.extractProductData(cartItem);
+            let item = this.extractProductData(cartItem);
 
             if (!item.id) {
                 return;
             }
             item.quantity = qty;
 
-            var ecommerceData = {};
+            let ecommerceData = {};
             ecommerceData[action] = {
                 products: [item]
             };

@@ -64,9 +64,8 @@ class Impression extends Tracker
 
     /**
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return string
      */
-    public function getCurrentCategoryName()
+    public function getCurrentCategoryName(): string
     {
         if (!$this->getShowCategory()) {
             return '';
@@ -92,9 +91,8 @@ class Impression extends Tracker
      * Render Metrika tracking success scripts
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     * @return string
      */
-    protected function _toHtml()
+    protected function _toHtml(): string
     {
         if (!$this->getConfig('ecommerce')) {
             return '';

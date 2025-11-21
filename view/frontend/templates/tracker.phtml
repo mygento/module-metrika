@@ -14,7 +14,7 @@ $currencyCode = $block->getCurrentCurrencyCode();
         k.async=1;k.src=r;a.parentNode.insertBefore(k,a);
     })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-    ym(<?php echo $code;?>, "init", <?php echo json_encode($options);?>);
+    ym(<?php echo $code;?>, "init", <?php echo $block->jsonEncode($options);?>);
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/<?php echo $code;?>" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->

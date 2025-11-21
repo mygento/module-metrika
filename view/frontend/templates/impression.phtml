@@ -18,7 +18,7 @@ $containerName = $block->getConfig('container_name');
     })('<?php echo $containerName; ?>', {
         ecommerce: {
             currencyCode: '<?php echo $block->escapeJs($currencyCode); ?>',
-            impressions: <?= json_encode($items); ?>
+            impressions: <?= $block->jsonEncode($items); ?>
         }
     });
 </script>

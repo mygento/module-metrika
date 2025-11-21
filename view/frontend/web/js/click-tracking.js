@@ -33,7 +33,7 @@ define([
          * Bind click events to product links
          */
         bindEvents: function() {
-            var self = this;
+            const self = this;
             
             $(document).on('click', this.options.productSelector + ' a', function(e) {
                 self.trackProductClick($(this));
@@ -41,15 +41,15 @@ define([
         },
 
         trackProductClick: function($link) {
-            var $productElement = $link.closest(this.options.productSelector);
+            const $productElement = $link.closest(this.options.productSelector);
             if (!$productElement.length) return;
 
-            var position = $productElement.parent().children(this.options.productSelector).index($productElement) + 1;
-            var productData = this.getProductData($productElement, position);
+            const position = $productElement.parent().children(this.options.productSelector).index($productElement) + 1;
+            const productData = this.getProductData($productElement, position);
             
             if (!productData.id) return;
 
-            var clickData = {
+            const clickData = {
                 'ecommerce': {
                     'currencyCode': this.options.currencyCode,
                     'click': {
@@ -75,8 +75,8 @@ define([
         },
 
         getProductPrice: function($productElement) {
-            var priceText = $productElement.find('.price').text().trim();
-            var price = parseFloat(priceText.replace(/[^\d.,]/g, '').replace(',', '.'));
+            const priceText = $productElement.find('.price').text().trim();
+            const price = parseFloat(priceText.replace(/[^\d.,]/g, '').replace(',', '.'));
             return isNaN(price) ? 0 : price;
         },
     });
