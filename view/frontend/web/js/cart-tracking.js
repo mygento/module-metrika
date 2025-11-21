@@ -39,7 +39,7 @@ define([
         },
 
         bindEvents: function() {
-            var self = this;
+            const self = this;
 
             $(document).on(this.options.addEventName, function(event, data) {
                 self.setToTemporaryEventStorage(self.options.addEventName, data || {});

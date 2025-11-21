@@ -19,13 +19,6 @@ use Mygento\Base\Helper\Data;
  */
 class Tracker extends \Magento\Framework\View\Element\Template
 {
-    /**
-     * Session
-     *
-     * @var \Magento\Framework\Session\SessionManagerInterface
-     */
-    protected $session;
-
     public function __construct(
         protected Data $helper,
         protected ProductAttributeHelperInterface $attributeHelper,
@@ -35,7 +28,6 @@ class Tracker extends \Magento\Framework\View\Element\Template
         array $data = [],
     ) {
         parent::__construct($context, $data);
-        $this->session = $context->getSession();
     }
 
     /**
