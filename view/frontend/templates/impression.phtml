@@ -1,5 +1,6 @@
 <?php
 /** @var $block Impression */
+/** @var $escaper \Magento\Framework\Escaper */
 
 use Mygento\Metrika\Block\Tracker\Impression;
 
@@ -28,10 +29,10 @@ $containerName = $block->getConfig('container_name');
     {
         "body": {
             "Mygento_Metrika/js/click-tracking": {
-                "categoryName": "<?php echo $block->escapeJs($categoryName); ?>",
-                "containerName": "<?php echo $containerName; ?>",
-                "currencyCode": "<?php echo $block->escapeJs($currencyCode); ?>",
-                "productSelector": "<?php echo $block->escapeJs($productSelector); ?>"
+                "categoryName": "<?php echo $escaper->escapeJs($categoryName); ?>",
+                "containerName": "<?php echo  $escaper->escapeJs($containerName); ?>",
+                "currencyCode": "<?php echo $escaper->escapeJs($currencyCode); ?>",
+                "productSelector": "<?php echo $escaper->escapeJs($productSelector); ?>"
             }
         }
     }

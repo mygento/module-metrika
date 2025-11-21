@@ -112,7 +112,7 @@ define([
         findCartItem: function(items, productInfo) {
             const productId = productInfo.id;
 
-            for (var i = 0; i < items.length; i++) {
+            for (let i = 0; i < items.length; i++) {
                 if (items[i]['product_id'] === productId) {
                     return items[i];
                 }
