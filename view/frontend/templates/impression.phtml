@@ -6,10 +6,11 @@ use Mygento\Metrika\Block\Tracker\Impression;
 
 $items = $block->getImpressionItems();
 
-$currencyCode = $block->getCurrentCurrencyCode();
-$categoryName = $block->getCategoryName();
-$productSelector = $block->getProductSelector();
-$containerName = $block->getConfig('container_name');
+$currencyCode = $escaper->escapeJs($block->getCurrentCurrencyCode());
+$categoryName = $escaper->escapeJs($block->getCategoryName());
+$productSelector = $escaper->escapeJs($block->getProductSelector());
+$containerName = $escaper->escapeJs($block->getConfig('container_name'));
+$productIdAttr = $escaper->escapeJs($block->getConfig('skuAttr'));
 ?>
 <?php if (!empty($items)): ?>
 <script>
@@ -18,7 +19,7 @@ $containerName = $block->getConfig('container_name');
         window[containerName].push(payload);
     })('<?php echo $containerName; ?>', {
         ecommerce: {
-            currencyCode: '<?php echo $block->escapeJs($currencyCode); ?>',
+            currencyCode: '<?php echo $currencyCode; ?>',
             impressions: <?= $block->jsonEncode($items); ?>
         }
     });
@@ -29,10 +30,11 @@ $containerName = $block->getConfig('container_name');
     {
         "body": {
             "Mygento_Metrika/js/click-tracking": {
-                "categoryName": "<?php echo $escaper->escapeJs($categoryName); ?>",
-                "containerName": "<?php echo  $escaper->escapeJs($containerName); ?>",
-                "currencyCode": "<?php echo $escaper->escapeJs($currencyCode); ?>",
-                "productSelector": "<?php echo $escaper->escapeJs($productSelector); ?>"
+                "categoryName": "<?php echo $categoryName; ?>",
+                "containerName": "<?php echo $containerName; ?>",
+                "currencyCode": "<?php echo $currencyCode; ?>",
+                "productSelector": "<?php echo $productSelector; ?>",
+                "productIdAttr": "<?php echo $productIdAttr; ?>"
             }
         }
     }

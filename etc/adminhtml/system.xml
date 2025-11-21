@@ -73,7 +73,7 @@
                 </field>
                 <field id="skuAttr" translate="label" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Product code attribute</label>
-                    <source_model>Mygento\Base\Model\Source\Attributes</source_model>
+                    <source_model>Mygento\Metrika\Model\Config\Source\Attribute</source_model>
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
