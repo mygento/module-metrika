@@ -20,7 +20,8 @@ define([
             containerName: 'dataLayer',
             addEventName: 'ajax:addToCart',
             removeEventName: 'ajax:removeFromCart',
-            currencyCode: null
+            currencyCode: null,
+            productIdAttr: 'sku'
         },
 
         /**
@@ -157,11 +158,25 @@ define([
             }
 
             return {
-                id: cartItem['product_sku'] || cartItem['product_id'] || cartItem['product_name'],
+                id: this.getProductId(cartItem),
                 name: cartItem['product_name'] ,
                 price: cartItem['product_price_value'] ,
             };
-        }
+        },
+
+        getProductId: function(cartItem) {
+            const attr = this.options.productIdAttr;
+
+            switch (attr) {
+                case 'entity_id':
+                    return cartItem['product_id'] || '';
+                case 'name':
+                    return cartItem['product_name'] || '';
+                case 'sku':
+                default:
+                    return cartItem['product_sku'] || '';
+            }
+        },
     });
 
     return $.mygento.cartTracking;

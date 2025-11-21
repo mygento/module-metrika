@@ -19,7 +19,8 @@ define([
             categoryName: '',
             containerName: 'dataLayer',
             currencyCode: '',
-            productSelector: '.product-item-info'
+            productSelector: '.product-item-info',
+            productIdAttr: 'sku'
         },
 
         /**
@@ -63,7 +64,7 @@ define([
 
         getProductData: function($productElement, position) {
             return {
-                'id': $productElement.find('[data-product-sku]').data('product-sku') || $productElement.find('[data-product-id]').data('product-id'),
+                'id': this.getProductId($productElement),
                 'name': $productElement.find('.product-item-name, .product-name, .product-item-link').first().text().trim().replace(/\s+/g, ' '),
                 'price': this.getProductPrice($productElement),
                 'category': this.options.categoryName,
@@ -78,6 +79,25 @@ define([
             const priceText = $productElement.find('.price').text().trim();
             const price = parseFloat(priceText.replace(/[^\d.,]/g, '').replace(',', '.'));
             return isNaN(price) ? 0 : price;
+        },
+
+        getProductId: function($productElement) {
+            const attr = this.options.productIdAttr;
+
+            if (attr === 'entity_id') {
+                return $productElement.find('[data-product-id]').data('product-id');
+            }
+
+            if (attr === 'name') {
+                return $productElement
+                    .find('.product-item-name, .product-name, .product-item-link')
+                    .first()
+                    .text()
+                    .trim()
+                    .replace(/\s+/g, ' ');
+            }
+
+            return $productElement.find('[data-product-sku]').data('product-sku');
         },
     });
 

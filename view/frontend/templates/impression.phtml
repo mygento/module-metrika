@@ -32,7 +32,8 @@ $containerName = $block->getConfig('container_name');
                 "categoryName": "<?php echo $escaper->escapeJs($categoryName); ?>",
                 "containerName": "<?php echo  $escaper->escapeJs($containerName); ?>",
                 "currencyCode": "<?php echo $escaper->escapeJs($currencyCode); ?>",
-                "productSelector": "<?php echo $escaper->escapeJs($productSelector); ?>"
+                "productSelector": "<?php echo $escaper->escapeJs($productSelector); ?>",
+                "productIdAttr": "<?php echo $escaper->escapeJs($block->getConfig('skuAttr')); ?>"
             }
         }
     }

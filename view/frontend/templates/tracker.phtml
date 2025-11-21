@@ -31,7 +31,8 @@ $containerName = $block->getConfig('container_name');
         "body": {
             "Mygento_Metrika/js/cart-tracking": {
                 "containerName": "<?php echo $escaper->escapeJs($containerName);?>",
-                "currencyCode": "<?php echo $escaper->escapeJs($currencyCode); ?>"
+                "currencyCode": "<?php echo $escaper->escapeJs($currencyCode); ?>",
+                "productIdAttr": "<?php echo $escaper->escapeJs($block->getConfig('skuAttr')); ?>"
             }
         }
     }
