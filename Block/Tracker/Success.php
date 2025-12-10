@@ -56,7 +56,10 @@ class Success extends \Mygento\Metrika\Block\Tracker
         $prodData = [];
         foreach ($order->getAllVisibleItems() as $item) {
             $qty = (int) $item->getQtyOrdered();
-            $price = ($item->getRowTotalInclTax() - $item->getDiscountAmount()) / $qty;
+            $price = ($item->getRowTotal()
+                - $item->getDiscountAmount()
+                + $item->getTaxAmount()
+                + $item->getDiscountTaxCompensationAmount()) / $qty;
             $prodData[] = [
                 'id' => (string) $this->attributeHelper->getValueByConfigPathOrDefault(
                     'metrika/general/skuAttr',
