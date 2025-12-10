@@ -77,7 +77,7 @@ class Success extends \Mygento\Metrika\Block\Tracker
                         'id' => (string) $order->getIncrementId(),
                         'shipping' => $order->getShippingInclTax(),
                     ],
-                    'products' => [$prodData],
+                    'products' => $prodData,
                 ],
             ],
         ];

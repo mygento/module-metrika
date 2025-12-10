@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceContainer name="mygento_metrika">
+        <referenceContainer name="before.body.end">
             <block class="Mygento\Metrika\Block\Tracker\Impression" name="mygento_metrika_advanced_result_impression" template="Mygento_Metrika::impression.phtml">
                 <arguments>
                     <argument name="list_type" xsi:type="string">search</argument>
