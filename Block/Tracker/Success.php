@@ -13,7 +13,6 @@ namespace Mygento\Metrika\Block\Tracker;
  */
 class Success extends \Mygento\Metrika\Block\Tracker
 {
-
     protected $_isScopePrivate = true;
 
     /**
