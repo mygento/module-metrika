@@ -13,6 +13,9 @@ namespace Mygento\Metrika\Block\Tracker;
  */
 class Success extends \Mygento\Metrika\Block\Tracker
 {
+
+    protected $_isScopePrivate = true;
+
     /**
      * @var \Magento\Checkout\Model\Session
      */
@@ -56,14 +59,17 @@ class Success extends \Mygento\Metrika\Block\Tracker
         $prodData = [];
         foreach ($order->getAllVisibleItems() as $item) {
             $qty = (int) $item->getQtyOrdered();
-            $price = ($item->getRowTotal() - $item->getDiscountAmount()) / $qty;
+            $price = ($item->getRowTotal()
+                - $item->getDiscountAmount()
+                + $item->getTaxAmount()
+                + $item->getDiscountTaxCompensationAmount()) / $qty;
             $prodData[] = [
                 'id' => (string) $this->attributeHelper->getValueByConfigPathOrDefault(
                     'metrika/general/skuAttr',
                     $item->getProductId(),
                 ),
                 'name' => $item->getName(),
-                'price' => round($price, 2),
+                'price' => number_format($price, 2, '.', ''),
                 'quantity' => (int) $item->getQtyOrdered(),
             ];
         }
@@ -72,7 +78,8 @@ class Success extends \Mygento\Metrika\Block\Tracker
                 'purchase' => [
                     'actionField' => [
                         'id' => (string) $order->getIncrementId(),
-                        'shipping' => $order->getShippingAmount(),
+                        'shipping' => number_format($order->getShippingInclTax(), 2, '.', ''),
+                        'revenue' => number_format($order->getGrandTotal(), 2, '.', ''),
                     ],
                     'products' => [$prodData],
                 ],
