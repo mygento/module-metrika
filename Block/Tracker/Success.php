@@ -81,7 +81,7 @@ class Success extends \Mygento\Metrika\Block\Tracker
                         'shipping' => number_format($order->getShippingInclTax(), 2, '.', ''),
                         'revenue' => number_format($order->getGrandTotal(), 2, '.', ''),
                     ],
-                    'products' => [$prodData],
+                    'products' => $prodData,
                 ],
             ],
         ];
