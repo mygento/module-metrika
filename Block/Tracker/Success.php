@@ -68,7 +68,7 @@ class Success extends \Mygento\Metrika\Block\Tracker
                     $item->getProductId(),
                 ),
                 'name' => $item->getName(),
-                'price' => number_format($price, 2, '.', ''),
+                'price' => round($price, 2),
                 'quantity' => (int) $item->getQtyOrdered(),
             ];
         }
@@ -77,8 +77,9 @@ class Success extends \Mygento\Metrika\Block\Tracker
                 'purchase' => [
                     'actionField' => [
                         'id' => (string) $order->getIncrementId(),
-                        'shipping' => number_format($order->getShippingInclTax(), 2, '.', ''),
-                        'revenue' => number_format($order->getGrandTotal(), 2, '.', ''),
+                        'shipping' => round($order->getShippingInclTax(), 2),
+                        'revenue' => round($order->getGrandTotal(), 2),
+                        'coupon' => $order->getCouponCode() ?? '',
                     ],
                     'products' => $prodData,
                 ],
