@@ -13,6 +13,8 @@ namespace Mygento\Metrika\Block\Tracker;
  */
 class Success extends \Mygento\Metrika\Block\Tracker
 {
+    protected $_isScopePrivate = true;
+
     /**
      * @var \Magento\Checkout\Model\Session
      */
@@ -75,7 +77,9 @@ class Success extends \Mygento\Metrika\Block\Tracker
                 'purchase' => [
                     'actionField' => [
                         'id' => (string) $order->getIncrementId(),
-                        'shipping' => $order->getShippingInclTax(),
+                        'shipping' => round($order->getShippingInclTax(), 2),
+                        'revenue' => round($order->getGrandTotal(), 2),
+                        'coupon' => $order->getCouponCode() ?? '',
                     ],
                     'products' => $prodData,
                 ],
