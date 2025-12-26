@@ -1,8 +1,8 @@
-/**
- * @author Mygento Team
- * @copyright 2015-2025 Mygento (https://www.mygento.com)
- * @package Mygento_Metrika
- */
+**
+* @author Mygento Team
+* @copyright 2015-2025 Mygento (https://www.mygento.com)
+* @package Mygento_Metrika
+*/
 
 define([
     'jquery',
@@ -18,8 +18,6 @@ define([
     $.widget('mygento.cartTracking', {
         options: {
             containerName: 'dataLayer',
-            addEventName: 'ajax:addToCart',
-            removeEventName: 'ajax:removeFromCart',
             currencyCode: null,
             productIdAttr: 'sku'
         },
@@ -29,36 +27,11 @@ define([
          */
         _create: function() {
             this.initContainer();
-            this.temporaryEventStorage = [];
-            this.cartItemsCache = [];
-            this.bindEvents();
             this.setCartDataListener();
         },
 
         initContainer: function() {
             window[this.options.containerName] = window[this.options.containerName] || [];
-        },
-
-        bindEvents: function() {
-            const self = this;
-
-            $(document).on(this.options.addEventName, function(event, data) {
-                self.setToTemporaryEventStorage(self.options.addEventName, data || {});
-            });
-
-            $(document).on(this.options.removeEventName, function(event, data) {
-                self.setToTemporaryEventStorage(self.options.removeEventName, data || {});
-            });
-        },
-
-        /**
-         * Store event to temporary storage until cart data is updated
-         */
-        setToTemporaryEventStorage: function(eventType, eventData) {
-            this.temporaryEventStorage.push({
-                type: eventType,
-                data: eventData
-            });
         },
 
         /**
@@ -69,65 +42,85 @@ define([
 
             const cart = customerData.get('cart');
             const initial = cart();
-            self.cartItemsCache = initial.items ? initial.items.slice() : [];
+            const initialItems = initial.items || [];
 
-            customerData.get('cart').subscribe(function(data) {
-                if (self.temporaryEventStorage.length) {
-                    self.executeEvents(data);
-                }
-
-                self.cartItemsCache = data.items ? data.items.slice() : [];
-            });
-        },
-
-        /**
-         * Execute pending events with full product data from cart
-         */
-        executeEvents: function(cartData) {
-            const self = this;
-            const items = cartData.items || [];
-
-            this.temporaryEventStorage.forEach(function(event) {
-                const eventData = event.data;
-
-                const cartItem = self.findCartItem(items, eventData);
-                const cartItemCache = self.findCartItem(self.cartItemsCache, eventData);
-                const qty = cartItem && cartItemCache
-                    ? Math.abs((cartItem?.qty ?? 0) - (cartItemCache?.qty ?? 0))
-                    : (cartItem?.qty ?? cartItemCache?.qty ?? 0);
-                if (event.type === self.options.addEventName) {
-                    self.handleAddToCart(cartItem, qty);
-                } else if (event.type === self.options.removeEventName) {
-                    self.handleRemoveFromCart(cartItemCache, qty);
-                }
-
-            });
-
-            this.temporaryEventStorage = [];
-        },
-
-        /**
-         * Find cart item by product id
-         */
-        findCartItem: function(items, data) {
-
-            const productId = (data.productInfo?.length === 1 && data.productInfo[0]?.id) || '';
-
-            for (let i = 0; i < items.length; i++) {
-                if (items[i]['product_id'] === productId || items[i]['product_sku'] === (data.sku || '')) {
-                    return items[i];
-                }
+            if (initialItems.length > 0 || !this.getPreviousItems().length) {
+                this.savePreviousItems(initialItems);
             }
 
-            return null;
+            customerData.get('cart').subscribe(function(data) {
+                const previousItems = self.getPreviousItems();
+                const currentItems = data.items || [];
+
+                if (previousItems.length > 0) {
+                    self.detectQtyChanges(currentItems, previousItems);
+                }
+
+                if (currentItems.length > 0) {
+                    self.savePreviousItems(currentItems);
+                } else if (previousItems.length > 0) {
+                    self.clearPreviousItems();
+                }
+            });
         },
 
-        handleAddToCart: function(cartItem, qty) {
-            this.trackCartEvent('add', cartItem, qty);
+        savePreviousItems: function(items) {
+            try {
+                sessionStorage.setItem('mygento_metrika_previous_items', JSON.stringify(items));
+            } catch (e) {}
         },
 
-        handleRemoveFromCart: function(cartItem, qty) {
-            this.trackCartEvent('remove', cartItem, qty);
+        getPreviousItems: function() {
+            try {
+                const stored = sessionStorage.getItem('mygento_metrika_previous_items');
+                return stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                return [];
+            }
+        },
+
+        clearPreviousItems: function() {
+            try {
+                sessionStorage.removeItem('mygento_metrika_previous_items');
+            } catch (e) {}
+        },
+
+        /**
+         * Detect cart changes by comparing current and cached cart items
+         */
+        detectQtyChanges: function(currentItems, previousItems) {
+            const self = this;
+            const items = currentItems || [];
+
+            items.forEach(function(cartItem) {
+                const cachedItem = previousItems.find(function(item) {
+                    return item['product_id'] === cartItem['product_id'] ||
+                        item['product_sku'] === cartItem['product_sku'];
+                });
+
+                const currentQty = cartItem?.qty ?? 0;
+                const previousQty = cachedItem?.qty ?? 0;
+                const qtyDiff = Math.abs(currentQty - previousQty);
+
+                if (qtyDiff > 0) {
+                    if (currentQty > previousQty) {
+                        self.trackCartEvent('add', cartItem, qtyDiff);
+                    } else if (currentQty < previousQty) {
+                        self.trackCartEvent('remove', cartItem, qtyDiff);
+                    }
+                }
+            });
+
+            previousItems.forEach(function(cachedItem) {
+                const currentItem = items.find(function(item) {
+                    return item['product_id'] === cachedItem['product_id'] ||
+                        item['product_sku'] === cachedItem['product_sku'];
+                });
+
+                if (!currentItem) {
+                    self.trackCartEvent('remove', cachedItem, cachedItem?.qty ?? 0);
+                }
+            });
         },
 
         trackCartEvent: function(action, cartItem, qty) {
