@@ -74,14 +74,14 @@ define([
 
             const cart = customerData.get('cart');
             const initial = cart();
-            self.cartItemsCache = initial.items ? initial.items.map(a => {return {...a}}) : [];
+            self.cartItemsCache = initial.items ? initial.items.map(item => {return {...item}}) : [];
 
             customerData.get('cart').subscribe(function(data) {
                 if (self.temporaryEventStorage.length) {
                     self.executeEvents(data);
                 }
 
-                self.cartItemsCache = data.items ? data.items.map(a => {return {...a}}) : [];
+                self.cartItemsCache = data.items ? data.items.map(item => {return {...item}}) : [];
             });
         },
 
