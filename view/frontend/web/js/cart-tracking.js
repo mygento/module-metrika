@@ -20,6 +20,7 @@ define([
             containerName: 'dataLayer',
             addEventName: 'ajax:addToCart',
             removeEventName: 'ajax:removeFromCart',
+            updateEventName: 'ajax:updateItemQty',
             currencyCode: null,
             productIdAttr: 'sku'
         },
@@ -49,6 +50,10 @@ define([
             $(document).on(this.options.removeEventName, function(event, data) {
                 self.setToTemporaryEventStorage(self.options.removeEventName, data || {});
             });
+
+            $(document).on(this.options.updateEventName, function(event, data) {
+                self.setToTemporaryEventStorage(self.options.updateEventName, data || {});
+            });
         },
 
         /**
@@ -69,14 +74,14 @@ define([
 
             const cart = customerData.get('cart');
             const initial = cart();
-            self.cartItemsCache = initial.items ? initial.items.slice() : [];
+            self.cartItemsCache = initial.items ? JSON.parse(JSON.stringify(initial.items)) : [];
 
             customerData.get('cart').subscribe(function(data) {
                 if (self.temporaryEventStorage.length) {
                     self.executeEvents(data);
                 }
 
-                self.cartItemsCache = data.items ? data.items.slice() : [];
+                self.cartItemsCache = data.items ? JSON.parse(JSON.stringify(data.items)) : [];
             });
         },
 
@@ -93,12 +98,18 @@ define([
                 const cartItem = self.findCartItem(items, eventData);
                 const cartItemCache = self.findCartItem(self.cartItemsCache, eventData);
                 const qty = cartItem && cartItemCache
-                    ? Math.abs((cartItem?.qty ?? 0) - (cartItemCache?.qty ?? 0))
-                    : (cartItem?.qty ?? cartItemCache?.qty ?? 0);
+                    ? (cartItem?.qty ?? 0) - (cartItemCache?.qty ?? 0)
+                    : (cartItem?.qty ?? -cartItemCache?.qty ?? 0);
                 if (event.type === self.options.addEventName) {
-                    self.handleAddToCart(cartItem, qty);
+                    self.handleAddToCart(cartItem, Math.abs(qty));
                 } else if (event.type === self.options.removeEventName) {
-                    self.handleRemoveFromCart(cartItemCache, qty);
+                    self.handleRemoveFromCart(cartItemCache, Math.abs(qty));
+                } else if (event.type === self.options.updateEventName) {
+                    if(qty>0) {
+                        self.handleAddToCart(cartItem, Math.abs(qty));
+                    } else {
+                        self.handleRemoveFromCart(cartItemCache, Math.abs(qty));
+                    }
                 }
 
             });
@@ -112,9 +123,9 @@ define([
         findCartItem: function(items, data) {
 
             const productId = (data.productInfo?.length === 1 && data.productInfo[0]?.id) || '';
-
+            const itemId = data.item_id || data.id || '';
             for (let i = 0; i < items.length; i++) {
-                if (items[i]['product_id'] === productId || items[i]['product_sku'] === (data.sku || '')) {
+                if (Number(items[i]['item_id']) === Number(itemId) || items[i]['product_id'] === productId || items[i]['product_sku'] === (data.sku || '')) {
                     return items[i];
                 }
             }
