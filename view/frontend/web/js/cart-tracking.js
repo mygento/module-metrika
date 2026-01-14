@@ -74,14 +74,14 @@ define([
 
             const cart = customerData.get('cart');
             const initial = cart();
-            self.cartItemsCache = initial.items ? JSON.parse(JSON.stringify(initial.items)) : [];
+            self.cartItemsCache = initial.items ? initial.items.map(a => {return {...a}}) : [];
 
             customerData.get('cart').subscribe(function(data) {
                 if (self.temporaryEventStorage.length) {
                     self.executeEvents(data);
                 }
 
-                self.cartItemsCache = data.items ? JSON.parse(JSON.stringify(data.items)) : [];
+                self.cartItemsCache = data.items ? data.items.map(a => {return {...a}}) : [];
             });
         },
 
@@ -97,15 +97,17 @@ define([
 
                 const cartItem = self.findCartItem(items, eventData);
                 const cartItemCache = self.findCartItem(self.cartItemsCache, eventData);
-                const qty = cartItem && cartItemCache
-                    ? (cartItem?.qty ?? 0) - (cartItemCache?.qty ?? 0)
-                    : (cartItem?.qty ?? -cartItemCache?.qty ?? 0);
+
+                const currentQty = cartItem?.qty ?? 0;
+                const prevQty = cartItemCache?.qty ?? 0;
+                const qty = currentQty - prevQty;
+
                 if (event.type === self.options.addEventName) {
                     self.handleAddToCart(cartItem, Math.abs(qty));
                 } else if (event.type === self.options.removeEventName) {
                     self.handleRemoveFromCart(cartItemCache, Math.abs(qty));
                 } else if (event.type === self.options.updateEventName) {
-                    if(qty>0) {
+                    if (qty>0) {
                         self.handleAddToCart(cartItem, Math.abs(qty));
                     } else {
                         self.handleRemoveFromCart(cartItemCache, Math.abs(qty));
@@ -124,13 +126,13 @@ define([
 
             const productId = (data.productInfo?.length === 1 && data.productInfo[0]?.id) || '';
             const itemId = data.item_id || data.id || '';
-            for (let i = 0; i < items.length; i++) {
-                if (Number(items[i]['item_id']) === Number(itemId) || items[i]['product_id'] === productId || items[i]['product_sku'] === (data.sku || '')) {
-                    return items[i];
-                }
-            }
+            const sku = data.sku || '';
 
-            return null;
+            return items.find(item =>
+                Number(item.item_id) === Number(itemId) ||
+                item.product_id === productId ||
+                item.product_sku === sku
+            );
         },
 
         handleAddToCart: function(cartItem, qty) {
