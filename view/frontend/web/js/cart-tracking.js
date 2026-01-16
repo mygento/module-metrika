@@ -74,14 +74,14 @@ define([
 
             const cart = customerData.get('cart');
             const initial = cart();
-            self.cartItemsCache = initial.items ? initial.items.map(a => {return {...a}}) : [];
+            self.cartItemsCache = initial.items ? initial.items.map(item => {return {...item}}) : [];
 
             customerData.get('cart').subscribe(function(cartItems) {
                 if (self.temporaryEventStorage.length) {
                     self.detectQtyChanges(cartItems.items, self.cartItemsCache);
                 }
 
-                self.cartItemsCache = cartItems.items ? cartItems.items.map(a => {return {...a}}) : [];
+                self.cartItemsCache = cartItems.items ? cartItems.items.map(item => {return {...item}}) : [];
             });
         },
 
