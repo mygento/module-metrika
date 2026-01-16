@@ -74,65 +74,51 @@ define([
 
             const cart = customerData.get('cart');
             const initial = cart();
-            self.cartItemsCache = initial.items ? initial.items.map(item => {return {...item}}) : [];
+            self.cartItemsCache = initial.items ? initial.items.map(a => {return {...a}}) : [];
 
-            customerData.get('cart').subscribe(function(data) {
+            customerData.get('cart').subscribe(function(cartItems) {
                 if (self.temporaryEventStorage.length) {
-                    self.executeEvents(data);
+                    self.detectQtyChanges(cartItems.items, self.cartItemsCache);
                 }
 
-                self.cartItemsCache = data.items ? data.items.map(item => {return {...item}}) : [];
+                self.cartItemsCache = cartItems.items ? cartItems.items.map(a => {return {...a}}) : [];
             });
         },
 
         /**
-         * Execute pending events with full product data from cart
+         * Detect cart changes by comparing current and cached cart items
          */
-        executeEvents: function(cartData) {
+        detectQtyChanges: function(currentItems, previousItems) {
             const self = this;
-            const items = cartData.items || [];
+            const items = currentItems || [];
 
-            this.temporaryEventStorage.forEach(function(event) {
-                const eventData = event.data;
-
-                const cartItem = self.findCartItem(items, eventData);
-                const cartItemCache = self.findCartItem(self.cartItemsCache, eventData);
+            items.forEach(function(cartItem) {
+                const cachedItem = previousItems.find(function(item) {
+                    return item['product_id'] === cartItem['product_id'];
+                });
 
                 const currentQty = cartItem?.qty ?? 0;
-                const prevQty = cartItemCache?.qty ?? 0;
-                const qty = currentQty - prevQty;
+                const previousQty = cachedItem?.qty ?? 0;
+                const qtyDiff = Math.abs(currentQty - previousQty);
 
-                if (event.type === self.options.addEventName) {
-                    self.handleAddToCart(cartItem, Math.abs(qty));
-                } else if (event.type === self.options.removeEventName) {
-                    self.handleRemoveFromCart(cartItemCache, Math.abs(qty));
-                } else if (event.type === self.options.updateEventName) {
-                    if (qty>0) {
-                        self.handleAddToCart(cartItem, Math.abs(qty));
-                    } else {
-                        self.handleRemoveFromCart(cartItemCache, Math.abs(qty));
+                if (qtyDiff > 0) {
+                    if (currentQty > previousQty) {
+                        self.handleAddToCart(cartItem, qtyDiff);
+                    } else if (currentQty < previousQty) {
+                        self.handleRemoveFromCart(cartItem, qtyDiff);
                     }
                 }
-
             });
 
-            this.temporaryEventStorage = [];
-        },
+            previousItems.forEach(function(cachedItem) {
+                const currentItem = items.find(function(item) {
+                    return item['product_id'] === cachedItem['product_id'];
+                });
 
-        /**
-         * Find cart item by product id
-         */
-        findCartItem: function(items, data) {
-
-            const productId = (data.productInfo?.length === 1 && data.productInfo[0]?.id) || '';
-            const itemId = data.item_id || data.id || '';
-            const sku = data.sku || '';
-
-            return items.find(item =>
-                Number(item.item_id) === Number(itemId) ||
-                item.product_id === productId ||
-                item.product_sku === sku
-            );
+                if (!currentItem) {
+                    self.handleRemoveFromCart(cachedItem, cachedItem?.qty ?? 0);
+                }
+            });
         },
 
         handleAddToCart: function(cartItem, qty) {
@@ -156,8 +142,8 @@ define([
                 products: [item]
             };
 
-            if (item.currencyCode || this.options.currencyCode) {
-                ecommerceData.currencyCode = item.currencyCode || this.options.currencyCode;
+            if (this.options.currencyCode) {
+                ecommerceData.currencyCode = this.options.currencyCode;
             }
 
             window[this.options.containerName].push({
