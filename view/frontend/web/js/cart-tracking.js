@@ -92,13 +92,14 @@ define([
     },
 
     setCartDataListener: function () {
-      this.options.cartItemsCache = customerData.get('cart')().items?.slice();
-      customerData.get('cart').subscribe(function (data) {
+      const customerCart = customerData.get('cart');
+      this.options.cartItemsCache = (customerCart().items ?? []).map((item) => ({ ...item }));
+      customerCart.subscribe(function (data) {
         if (this.options.temporaryEventStorage.length) {
           this.executeEvents();
         }
 
-        this.options.cartItemsCache = data.items.slice();
+        this.options.cartItemsCache = data.items.map((item) => ({ ...item }));
       }.bind(this));
     },
 
