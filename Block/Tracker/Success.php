@@ -80,6 +80,7 @@ class Success extends \Mygento\Metrika\Block\Tracker
                         'shipping' => round($order->getShippingInclTax(), 2),
                         'revenue' => round($order->getGrandTotal(), 2),
                         'coupon' => $order->getCouponCode() ?? '',
+                        'payment_method' => $order->getPayment()->getMethod(),
                     ],
                     'products' => $prodData,
                 ],
